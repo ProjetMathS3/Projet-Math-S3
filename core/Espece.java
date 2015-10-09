@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Espece {
     private Point position;
-    private int mouvement;
+    private int mouvementParTour;
     private int vision;
     private int tempsReproduction;
     private int frequenceReproduction;
@@ -28,12 +28,12 @@ public class Espece {
         this.position = position;
     }
 
-    public int getMouvement() {
-        return mouvement;
+    public int getMouvementParTour() {
+        return mouvementParTour;
     }
 
-    public void setMouvement(int mouvement) {
-        this.mouvement = mouvement;
+    public void setMouvementParTour(int mouvementParTour) {
+        this.mouvementParTour = mouvementParTour;
     }
 
     public int getVision() {
@@ -108,7 +108,7 @@ public class Espece {
     }
 
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
-        int mouvementRestant = mouvement;
+        int mouvementRestant = mouvementParTour;
 
         while (mouvementRestant > 0) {
             int distanceX = positionCible.x - position.x;
