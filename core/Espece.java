@@ -81,14 +81,15 @@ public class Espece {
     }
 
 
-    public boolean seReproduire() {
-        return true;
+    public void seReproduire() {
+
     }
 
-    public boolean seDeplacer() {
-        return true;
+    public void seDeplacer() {
+
     }
 
+    private void allerSurCaseAdjacente() {
 
-
+    }
 }
