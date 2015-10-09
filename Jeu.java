@@ -1,10 +1,10 @@
-package grille;
+//package grille;
 
-public class Jeu {
+//public class Jeu {
 
-	public static void main(String[] args) {
+	//public static void main(String[] args) {
 		
-		DisplayFrame disp = new DisplayFrame("Proie/Prédateur", 5, 5 );  //Commentaire
-	}
+		//DisplayFrame disp = new DisplayFrame("Proie/Prédateur", 5, 5 );  //Commentaire
+	//}
 
-}
+//}
