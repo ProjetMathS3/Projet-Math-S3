@@ -6,14 +6,15 @@ package grille;
 import java.awt.*;
 import java.beans.Expression;
 import javax.swing.*;
+import java.util.Scanner;
 
 
 
 public class CadrePrincipal extends JFrame {
-    private static final int nombreParametres = 6; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
+    private static final int nombreParametres = 8; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
     private static final String[] nomsParametres =
-            { "Nombre de proie", "Nombre de prédateur", "Taux de reproduction", "Famine", "Déplacement proie", "Déplacement prédateur" };
-    private double[] valeurParametres = { 10, 10, 0.2, 0.5, 10, 10 }; //Paramètres par défaut
+            { "Nombre de proie", "Nombre de prédateur", "Taux de reproduction", "Mortalité des proies", "Mortalité des prédateurs", "Famine", "Déplacement proie", "Déplacement prédateur" };
+    private double[] valeurParametres = { 10, 10, 0.2, 0.5, 1, 0.5, 10, 10 }; //Paramètres par défaut
     private JTextField[] champsParametres;
     private JTextField champExpression;
     //private PanneauDessin dessin;
@@ -21,6 +22,7 @@ public class CadrePrincipal extends JFrame {
 
     public CadrePrincipal () {
         super ("Simulateur d'évolution");
+
 
         //Panneau à droite Les paramètres !
         champsParametres = new JTextField[nombreParametres];
@@ -56,16 +58,20 @@ public class CadrePrincipal extends JFrame {
             JPanel panneauDeDroite = new JPanel();
             panneauDeDroite.add(panneauDeParametres);
 
-            // panneau de gauche (Partie david) La grille !
+            // panneau de gauche La grille !
+            String largeur;
+            int l;
+            largeur=JOptionPane.showInputDialog(this,"largeur ");
+            l=Integer.parseInt(largeur);
             JPanel panneauDeGauche = new JPanel();
-            DisplayFrame disp = new DisplayFrame("Proie/Prédateur", 50, 50 );
+            DisplayFrame disp = new DisplayFrame("Proie/Prédateur", l, 26, panneauDeGauche.getSize() );
+
             panneauDeGauche.add(disp);
 
 
 
             // assemblage final
             JPanel panneauCentral = new JPanel();
-            panneauCentral.setLayout(new BorderLayout(10, 10));
             panneauCentral.setLayout(new GridLayout(1, 2));
             panneauCentral.add(panneauDeGauche);
             panneauCentral.add(panneauDeDroite);
@@ -81,7 +87,8 @@ public class CadrePrincipal extends JFrame {
             setDefaultCloseOperation(EXIT_ON_CLOSE);
             pack();
             setVisible(true);
-        }
+
+    }
 
     public static void main(String[] args) {
         JFrame.setDefaultLookAndFeelDecorated(true);

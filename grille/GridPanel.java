@@ -1,32 +1,36 @@
 package grille;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 
 public class GridPanel extends JPanel {
     private int rows;
     private int cols;
     private JLabel[][] grid;
+    private Dimension D;
 
-    public GridPanel(int r, int c) {
+    public GridPanel(int r, int c, Dimension d) {
         rows = r;
         cols = c;
+        D=d;
         grid = new JLabel[rows][cols];
 
-        setLayout (new GridLayout(rows, cols, 0, 0));
+        setLayout (new GridLayout(rows, cols));
         setBackground( new Color( 200,200,200 ) );
 
         for (int i = 0; i < rows; i++ ) {
             for (int j = 0; j < cols; j++ ) {
                 grid[i][j] = new JLabel();
-                grid[i][j].setBorder( BorderFactory.createLineBorder(Color.BLACK,1) );
+                grid[i][j].setBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
                 grid[i][j].setFont( new Font("Courier", Font.BOLD, 12));
                 grid[i][j].setForeground(Color.WHITE);
                 grid[i][j].setHorizontalAlignment(SwingConstants.CENTER);
                 add( grid[i][j] );
             }
         }
-        setPreferredSize( new Dimension(500,500) );
+        setPreferredSize(D);
     }
 
     public void setGrid(int i, int j, char value) {
