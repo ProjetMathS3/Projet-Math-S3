@@ -9,8 +9,16 @@ public class Proie extends Espece {
       Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
      */
     private boolean isPredateurPresent (){
-
+        //todo
     } //predateurPresent
+
+
+    /*CONGENERELEPLUSPROCHE - Comportement:
+      Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
+     */
+    private Point ouFuir () {
+        //todo
+    } //congenereLePlusProche
 
 
     /*FUIR - Comportement:
@@ -19,21 +27,36 @@ public class Proie extends Espece {
       SINON, elle ne fait rien
      */
     private void fuir() {
-        private Point OuFuir; //todo
         if (isPredateurPresent ()) {
-            allerVersPosition (OuFuir);
+            allerVersPosition (ouFuir ());
         }
     } //fuir ()
 
+    /*PREDATEURPRESENT - Comportement:
+      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
+     */
+    private boolean isPredateurPresent () {
+        //todo
+    } //predateurPresent
+
+
+    /*CONGENERELEPLUSPROCHE - Comportement:
+      Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
+     */
+    private Point congenereLePlusProche () {
+        //todo
+    } //congenereLePlusProche
+
 
     /*ALLERVERSCONGENERE - Comportement:
-      SI il y des congégères (aka même espèce),
+      SI il y des congénères (aka même espèce),
       ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
       SINON, elle ne fait rien
      */
     private void allerVersCongenere (this.espece) {
         if (isCongenerePresent ()) {
-            allerVersPosition (CongenereLePlusProche);
+            allerVersPosition (congenereLePlusProche ());
+            seReproduire ();
         }
     }
 
@@ -51,6 +74,5 @@ public class Proie extends Espece {
         fuir();
         allerVersCongenere();
     } //jouerTour ()
-
 
 }
