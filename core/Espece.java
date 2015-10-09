@@ -84,6 +84,11 @@ public class Espece {
     }
 
 
+    /**
+     * Renvoie l'individu le plus proche dans list
+     * @param list  une liste d'espèces
+     * @return      l'individu trouvé
+     */
     public Espece trouverIndividuProche(ArrayList<Espece> list) {
         if (list.isEmpty()) {
             return null;
@@ -107,6 +112,11 @@ public class Espece {
 
     }
 
+    /**
+     * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
+     * @param positionCible
+     * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
+     */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         int mouvementRestant = mouvementParTour;
 
