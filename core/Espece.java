@@ -43,7 +43,6 @@ public class Espece {
     public void setVision(int vision) {
         this.vision = vision;
     }
-
     public int getTempsReproduction() {
         return tempsReproduction;
     }
@@ -159,3 +158,4 @@ public class Espece {
         }
     }
 }
+
