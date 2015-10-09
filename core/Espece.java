@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by r14003530 on 09/10/15.
@@ -11,7 +12,7 @@ public class Espece {
     private int vision;
     private int tempsReproduction;
     private int frequenceReproduction;
-    private int age;
+    private int dureeDeVie;
     private int generation;
     private boolean reprodui;
 
@@ -56,12 +57,12 @@ public class Espece {
         this.frequenceReproduction = frequenceReproduction;
     }
 
-    public int getAge() {
-        return age;
+    public int getDureeDeVie() {
+        return dureeDeVie;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDureeDeVie(int dureeDeVie) {
+        this.dureeDeVie = dureeDeVie;
     }
 
     public int getGeneration() {
@@ -81,6 +82,25 @@ public class Espece {
     }
 
 
+    public Espece trouverIndividuProche(ArrayList<Espece> list) {
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        Espece individuProche = list.get(0);
+        double distancePlusProche = position.distance(list.get(0).getPosition());
+
+        for (int i = 1; i < list.size(); ++i) {
+            double distanceLocale = position.distance(list.get(i).getPosition());
+            if (distanceLocale < distancePlusProche) {
+                distancePlusProche = distanceLocale;
+                individuProche = list.get(i);
+            }
+        }
+
+        return individuProche;
+    }
+
     public void seReproduire() {
 
     }
@@ -89,7 +109,16 @@ public class Espece {
 
     }
 
-    private void allerSurCaseAdjacente() {
-
+    private void allerSurCaseAdjacente(Constantes.Directions direction) {
+        switch (direction) {
+            case Haut:
+                break;
+            case Bas:
+                break;
+            case Gauche:
+                break;
+            case Droite:
+                break;
+        }
     }
 }
