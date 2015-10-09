@@ -32,4 +32,15 @@ public class Predateur extends Espece {
     public void chasser() {
 
     }
+
+    /*ALLERVERSCONGENERE - Comportement:
+      SI il y des congégères (aka même espèce),
+      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
+      SINON, elle ne fait rien
+     */
+    private void allerVersCongenere () {
+        if (isCongenerePresent ()) {
+            allerVersPosition (CongenereLePlusProche);
+        }
+    }
 }
