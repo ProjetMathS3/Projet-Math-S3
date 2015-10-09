@@ -1,5 +1,6 @@
 package core;
 
+import utils.Case;
 import utils.Directions;
 
 import java.awt.*;
@@ -107,21 +108,54 @@ public class Espece {
 
     }
 
-    public void allerVersPosition(Point positionCible, int[][] positionsIndividus) {
+    public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
+        int mouvementRestant = mouvement;
 
+        while (mouvementRestant > 0) {
+            int distanceX = positionCible.x - position.x;
+            int distanceY = positionCible.y - position.y;
+
+            if (Math.abs(distanceX) > Math.abs(distanceY)) {
+                if (distanceX > 0) {
+                    allerSurCaseAdjacente(Directions.Droite, positionsIndividus);
+                }
+                else {
+                    allerSurCaseAdjacente(Directions.Gauche, positionsIndividus);
+                }
+            }
+            else {
+                if (distanceY > 0) {
+                    allerSurCaseAdjacente(Directions.Bas, positionsIndividus);
+                }
+                else {
+                    allerSurCaseAdjacente(Directions.Haut, positionsIndividus);
+                }
+            }
+
+            mouvementRestant--;
+        }
     }
 
-    private void allerSurCaseAdjacente(Directions direction, int[][] positionsIndividus) {
+    private void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
         switch (direction) {
             case Haut:
-                if (positionsIndividus[position.x][position.y - 1] == )
+                seDeplacer(0, -1, positionsIndividus);
                 break;
             case Bas:
+                seDeplacer(0, 1, positionsIndividus);
                 break;
             case Gauche:
+                seDeplacer(-1, 0, positionsIndividus);
                 break;
             case Droite:
+                seDeplacer(1, 0, positionsIndividus);
                 break;
+        }
+    }
+
+    private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
+        if (positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
+            position.move(position.x + deltaX, position.y + deltaY);
         }
     }
 }
