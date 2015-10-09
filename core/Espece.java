@@ -1,5 +1,7 @@
 package core;
 
+import utils.Directions;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -105,13 +107,14 @@ public class Espece {
 
     }
 
-    public void seDeplacer() {
+    public void allerVersPosition(Point positionCible, int[][] positionsIndividus) {
 
     }
 
-    private void allerSurCaseAdjacente(Constantes.Directions direction) {
+    private void allerSurCaseAdjacente(Directions direction, int[][] positionsIndividus) {
         switch (direction) {
             case Haut:
+                if (positionsIndividus[position.x][position.y - 1] == )
                 break;
             case Bas:
                 break;
