@@ -159,3 +159,14 @@ public class Espece {
     }
 }
 
+
+    /*ALLERVERSCONGENERE - Comportement:
+      SI il y des congégères (aka même espèce),
+      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
+      SINON, elle ne fait rien
+     */
+    private void allerVersCongenere (this.espece) {
+        if (isCongenerePresent ()) {
+            allerVersPosition (CongenereLePlusProche);
+        }
+    }
