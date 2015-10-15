@@ -64,6 +64,14 @@ public class Predateur extends Espece {
         }
     }
 
+    public void seReproduire(ArrayList<Espece> especes) {
+        // foreach (Espece e in especes)
+        especes.stream().filter(e -> getPosition().equals(e.getPosition())).forEach(e -> {
+            setReprodui(true);
+            e.setReprodui(true);
+        });
+    }
+
     /*ALLERVERSCONGENERE - Comportement:
       SI il y des congégères (aka même espèce),
       ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
