@@ -1,11 +1,32 @@
 package core;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
 /**
  * Created by r14003530 on 09/10/15.
  */
 public class Predateur extends Espece {
     private int niveauFaim;
     private int etatLimiteFaim;
+
+    public Predateur(Point position) {
+        this.setPosition(position);
+        this.setVision(0);
+    }
+
+    public Predateur(Point position, double vision, int niveauFaim, int etatLimiteFaim) {
+        this(position);
+        this.setVision(vision);
+        this.niveauFaim = niveauFaim;
+        this.etatLimiteFaim = etatLimiteFaim;
+    }
+
+    public Predateur (int x, int y){
+        this(new Point(x, y));
+    }
+
 
     public int getEtatLimiteFaim() {
         return etatLimiteFaim;
@@ -29,8 +50,10 @@ public class Predateur extends Espece {
 
     }
 
-    public void chasser() {
+    public void chasser(ArrayList<Espece> proiesList) {
+        if (trouverIndividuProche(proiesList) != null) {
 
+        }
     }
 
     /*ALLERVERSCONGENERE - Comportement:
