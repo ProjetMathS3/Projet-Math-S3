@@ -1,5 +1,9 @@
 package core;
 
+import graphe.AfficheFonction;
+
+import java.util.ArrayList;
+
 /**
  * Created by r14003530 on 09/10/15.
  */
@@ -26,8 +30,8 @@ public class Proie extends Espece {
       SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
       SINON, elle ne fait rien
      */
-    private void fuir() {
-        if (isPredateurPresent ()) {
+    private void fuir(ArrayList <Espece> Predateur) {
+        if (trouverIndividuProche(Predateur) != null) {
             allerVersPosition (ouFuir ());
         }
     } //fuir ()

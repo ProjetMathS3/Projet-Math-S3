@@ -167,7 +167,7 @@ public abstract class Espece {
     }
 
     protected void allerVersCongenere (ArrayList <Espece> Espece) {
-        if (trouverIndividuProche (Espece)) {
+        if (trouverIndividuProche (Espece) != null) {
             allerVersPosition (trouverIndividuProche (Espece));
             seReproduire ();
         }
