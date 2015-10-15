@@ -51,6 +51,8 @@ public class CadrePrincipal extends JFrame {
     private JRadioButtonMenuItem jrmi2 = new JRadioButtonMenuItem("Radio 2");
     private JRadioButtonMenuItem jrmi3 = new JRadioButtonMenuItem("1900 x 1080");
     private JRadioButtonMenuItem jrmi4 = new JRadioButtonMenuItem("1600 x 900");
+    private JRadioButtonMenuItem jrmi5 = new JRadioButtonMenuItem("1366 x 768");
+    private JRadioButtonMenuItem jrmi6 = new JRadioButtonMenuItem("Automatique");
 
 
 
@@ -126,7 +128,7 @@ public class CadrePrincipal extends JFrame {
             panneauCentral.add(panneauDeDroite);
 
 
-            JPanel panneauTotal = new JPanel();
+            final JPanel panneauTotal = new JPanel();
             //panneauTotal.setLayout(new BorderLayout(3, 3));
             panneauTotal.add(panneauCentral);
 
@@ -166,13 +168,17 @@ public class CadrePrincipal extends JFrame {
             this.test3_2.addSeparator();
             //On met nos radios dans un ButtonGroup
             ButtonGroup bg2 = new ButtonGroup();
+            bg2.add(jrmi6);
             bg2.add(jrmi3);
             bg2.add(jrmi4);
+            bg2.add(jrmi5);
             //On présélectionne la première radio
-            jrmi3.setSelected(true);
+            jrmi6.setSelected(true);
 
+            this.test3_2.add(jrmi6);
             this.test3_2.add(jrmi3);
             this.test3_2.add(jrmi4);
+            this.test3_2.add(jrmi5);
             //Ajout d'un sous menu à notre menu
             this.test3.add(this.test3_2);
 
@@ -188,33 +194,49 @@ public class CadrePrincipal extends JFrame {
             this.menuBar.add(test3);
             this.setJMenuBar(menuBar);
             this.setVisible(true);
-            int LE = 1900;
-            int HE = 1080;
+            Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+            final int LE = (int)tailleEcran.getHeight();
+            final int HE = (int)tailleEcran.getWidth();
             //Ajout des listener au JMenuItem
             jrmi3.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
                     setSize(1900,1080);
+
                 }
             });
             jrmi4.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    setSize(1006,900);
+                    setSize(1600,900);
+
                 }
             });
-            /*jrmi4.addActionListener(this);
-            jrmi2.addActionListener(this);
-            jrmi1.addActionListener(this);*/
+            jrmi5.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    setSize(1366,768);
 
-            //Action en fonction du choix utilisateur sur le menu
+                }
+            });
+            jrmi6.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    setSize(LE,HE);
+                    pack();
+                }
+            });
+
+            /* Test Mode pleine écran
+
+             */
 
 
             this.setJMenuBar(menuBar);
             this.add(panneauTotal);
+
             setDefaultCloseOperation(EXIT_ON_CLOSE);
 
             setSize(LE,HE);
-            //pack();
+            pack();
             setVisible(true);
+
 
     }
 
