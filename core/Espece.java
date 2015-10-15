@@ -9,10 +9,10 @@ import java.util.ArrayList;
 /**
  * Created by r14003530 on 09/10/15.
  */
-public class Espece {
+public abstract class Espece {
     private Point position;
     private int mouvementParTour;
-    private int vision;
+    private double vision;
     private int tempsReproduction;
     private int frequenceReproduction;
     private int dureeDeVie;
@@ -36,13 +36,14 @@ public class Espece {
         this.mouvementParTour = mouvementParTour;
     }
 
-    public int getVision() {
+    public double getVision() {
         return vision;
     }
 
-    public void setVision(int vision) {
+    public void setVision(double vision) {
         this.vision = vision;
     }
+
     public int getTempsReproduction() {
         return tempsReproduction;
     }
@@ -90,15 +91,12 @@ public class Espece {
      * @return      l'individu trouvé
      */
     public Espece trouverIndividuProche(ArrayList<Espece> list) {
-        if (list.isEmpty()) {
-            return null;
-        }
+        Espece individuProche = null;
+        double distancePlusProche = vision;
 
-        Espece individuProche = list.get(0);
-        double distancePlusProche = position.distance(list.get(0).getPosition());
-
-        for (int i = 1; i < list.size(); ++i) {
-            double distanceLocale = position.distance(list.get(i).getPosition());
+        double distanceLocale;
+        for (int i = 0; i < list.size(); ++i) {
+            distanceLocale = position.distance(list.get(i).getPosition()); // Distance entre l'espece courante et l'espece i dans la liste
             if (distanceLocale < distancePlusProche) {
                 distancePlusProche = distanceLocale;
                 individuProche = list.get(i);
@@ -108,19 +106,23 @@ public class Espece {
         return individuProche;
     }
 
-    public void seReproduire() {
+    /**
+     * Si un autre individu est sur la même case :
+     *  crée une nouvelle espèce sur une case adjacente
+     * @param especes   liste de proies ou de prédateurs
+     */
+    public abstract void seReproduire(ArrayList<Espece> especes);
 
-    }
 
     /**
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
-     * @param positionCible
+     * @param positionCible         position cible
      * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         int mouvementRestant = mouvementParTour;
 
-        while (mouvementRestant > 0) {
+        while (mouvementRestant > 0 && ! position.equals(positionCible)) {
             int distanceX = positionCible.x - position.x;
             int distanceY = positionCible.y - position.y;
 
@@ -167,16 +169,27 @@ public class Espece {
             position.move(position.x + deltaX, position.y + deltaY);
         }
     }
-}
 
-
-    /*ALLERVERSCONGENERE - Comportement:
-      SI il y des congégères (aka même espèce),
-      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
-      SINON, elle ne fait rien
-     */
-    private void allerVersCongenere (this.espece) {
-        if (isCongenerePresent ()) {
-            allerVersPosition (CongenereLePlusProche);
+    protected void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
+        Espece individuProche = trouverIndividuProche(especes);
+        if (individuProche != null) {
+            allerVersPosition (individuProche.getPosition(), positionEspeces);
         }
     }
+
+    public void reinitTour() {
+        reprodui = false;
+    }
+
+    /**
+     * Jouer un tour de l'individu
+     */
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur);
+
+    public static void main(String[] args) {
+        ArrayList<Espece> list = new ArrayList<Espece>();
+        list.add(new Predateur(2,3, 5));
+        list.add(new Predateur(2,6, 5));
+        System.out.println(list.get(0).trouverIndividuProche(list));
+    }
+}
