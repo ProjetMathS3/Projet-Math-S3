@@ -5,5 +5,6 @@ package utils;
  */
 public enum Case {
     Vide,
-    Occupee
+    Proie,
+    Predateur
 }

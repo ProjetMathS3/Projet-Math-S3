@@ -106,6 +106,23 @@ public abstract class Espece {
         return individuProche;
     }
 
+    public Espece trouverIndividuCaseAdjacente(ArrayList<Espece> list) {
+        for (Espece e : list) {
+            if (estSurCaseAdjacente(e.getPosition())) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    private boolean estSurCaseAdjacente(Point positionATester) {
+        return positionATester.equals(position) ||
+                (positionATester.x == position.x && positionATester.y == position.y + 1) ||
+                (positionATester.x == position.x && positionATester.y == position.y - 1) ||
+                (positionATester.x == position.x + 1 && positionATester.y == position.y) ||
+                (positionATester.x == position.x - 1 && positionATester.y == position.y);
+    }
+
     /**
      * Si un autre individu est sur la même case :
      *  crée une nouvelle espèce sur une case adjacente
@@ -121,6 +138,7 @@ public abstract class Espece {
      */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         int mouvementRestant = mouvementParTour;
+        boolean bloque = false;
 
         while (mouvementRestant > 0 && ! position.equals(positionCible)) {
             int distanceX = positionCible.x - position.x;
