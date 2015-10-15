@@ -21,6 +21,8 @@ import javax.swing.JRadioButtonMenuItem;
 
 
 public class CadrePrincipal extends JFrame {
+    public int c ;
+
     private static final int nombreParametres = 8; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
     private static final String[] nomsParametres =
             { "Nombre de proie", "Nombre de prédateur", "Taux de reproduction", "Mortalité des proies", "Mortalité des prédateurs", "Famine", "Déplacement proie", "Déplacement prédateur" };
@@ -53,6 +55,8 @@ public class CadrePrincipal extends JFrame {
     private JRadioButtonMenuItem jrmi4 = new JRadioButtonMenuItem("1600 x 900");
     private JRadioButtonMenuItem jrmi5 = new JRadioButtonMenuItem("1366 x 768");
     private JRadioButtonMenuItem jrmi6 = new JRadioButtonMenuItem("Automatique");
+
+
 
 
 
@@ -96,10 +100,9 @@ public class CadrePrincipal extends JFrame {
             panneauDeDroite.add(panneauDeParametres);
 
             // panneau de gauche La grille !
-            String largeur;
-            int c;
-            largeur=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
-            c=Integer.parseInt(largeur);
+            String taille;
+            taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
+            c=Integer.parseInt(taille);
             JPanel panneauDeGauche = new JPanel();
             // Choix dynamique de la taille de la grille en fonction du nombre de case
             int hauteurG = (0);
@@ -109,8 +112,8 @@ public class CadrePrincipal extends JFrame {
                  largeurG = (400);
             }
             else{
-                hauteurG = (800);
-                largeurG = (800);
+                hauteurG = (500);
+                largeurG = (500);
             }
             Dimension Dim = new Dimension(hauteurG, largeurG );
             DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
@@ -122,14 +125,13 @@ public class CadrePrincipal extends JFrame {
 
             // assemblage final
             JPanel panneauCentral = new JPanel();
-            panneauCentral.setLayout(new GridLayout(1, 2));
-            panneauCentral.setSize(2*c,2*5);
-            panneauCentral.add(panneauDeGauche);
-            panneauCentral.add(panneauDeDroite);
+            panneauCentral.setLayout(new BorderLayout());
+            //panneauCentral.setSize(2*c,2*5);
+            panneauCentral.add(panneauDeGauche, BorderLayout.WEST);
+            panneauCentral.add(panneauDeDroite, BorderLayout.CENTER);
 
 
             final JPanel panneauTotal = new JPanel();
-            //panneauTotal.setLayout(new BorderLayout(3, 3));
             panneauTotal.add(panneauCentral);
 
 
@@ -207,6 +209,7 @@ public class CadrePrincipal extends JFrame {
             jrmi4.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
                     setSize(1600,900);
+
 
                 }
             });
