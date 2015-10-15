@@ -43,8 +43,8 @@ public class Proie extends Espece {
     public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur) {
         this.age += 1;
         seReproduire (Proie);
-        fuir(Predateur);
-        allerVersCongenere(Proie);
+        fuir (Predateur);
+        allerVersCongenere (Proie);
     } //jouerTour ()
 
 }
