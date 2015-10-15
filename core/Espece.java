@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public abstract class Espece {
     private Point position;
     private int mouvementParTour;
-    private int vision;
+    private double vision;
     private int tempsReproduction;
     private int frequenceReproduction;
     private int dureeDeVie;
@@ -36,13 +36,14 @@ public abstract class Espece {
         this.mouvementParTour = mouvementParTour;
     }
 
-    public int getVision() {
+    public double getVision() {
         return vision;
     }
 
-    public void setVision(int vision) {
+    public void setVision(double vision) {
         this.vision = vision;
     }
+
     public int getTempsReproduction() {
         return tempsReproduction;
     }
@@ -90,15 +91,12 @@ public abstract class Espece {
      * @return      l'individu trouvé
      */
     public Espece trouverIndividuProche(ArrayList<Espece> list) {
-        if (list.isEmpty()) {
-            return null;
-        }
+        Espece individuProche = null;
+        double distancePlusProche = vision;
 
-        Espece individuProche = list.get(0);
-        double distancePlusProche = position.distance(list.get(0).getPosition());
-
-        for (int i = 1; i < list.size(); ++i) {
-            double distanceLocale = position.distance(list.get(i).getPosition());
+        double distanceLocale;
+        for (int i = 0; i < list.size(); ++i) {
+            distanceLocale = position.distance(list.get(i).getPosition()); // Distance entre l'espece courante et l'espece i dans la liste
             if (distanceLocale < distancePlusProche) {
                 distancePlusProche = distanceLocale;
                 individuProche = list.get(i);
@@ -145,7 +143,7 @@ public abstract class Espece {
         }
     }
 
-    protected void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
+    private void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
         switch (direction) {
             case Haut:
                 seDeplacer(0, -1, positionsIndividus);
@@ -162,7 +160,7 @@ public abstract class Espece {
         }
     }
 
-    protected void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
+    private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
             position.move(position.x + deltaX, position.y + deltaY);
         }
@@ -179,6 +177,11 @@ public abstract class Espece {
      * Jouer un tour de l'individu
      */
     protected abstract void jouerTour();
+
+    public static void main(String[] args) {
+        ArrayList<Espece> list = new ArrayList<Espece>();
+        list.add(new Proie())
+    }
 }
 
 
