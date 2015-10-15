@@ -18,7 +18,7 @@ public class Proie extends Espece {
      */
     private Point ouFuir () {
         //todo
-    } //congenereLePlusProche
+    } //ouFuir ()
 
 
     /**FUIR - Comportement:
@@ -26,10 +26,8 @@ public class Proie extends Espece {
      * SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
      * SINON, elle ne fait rien
      */
-    private void fuir(ArrayList <Espece> Predateur) {
-        if (trouverIndividuProche(Predateur) != null) {
-            allerVersPosition (ouFuir ());
-        }
+    private void fuir (ArrayList <Espece> Predateur) {
+        allerVersPosition (ouFuir ());
     } //fuir ()
 
     /**JOUERTOUR - Comportement:
@@ -41,10 +39,14 @@ public class Proie extends Espece {
      * SINON, elle ne fait rien
      */
     public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur) {
-        this.age += 1;
+        ++this.age;
         seReproduire (Proie);
-        fuir (Predateur);
-        allerVersCongenere (Proie);
+        if (trouverIndividuProche(Predateur) != null)
+            fuir (Predateur);
+        else {
+            allerVersCongenere(Proie);
+            seReproduire(Proie);
+        }
     } //jouerTour ()
 
 }

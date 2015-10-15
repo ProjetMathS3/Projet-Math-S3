@@ -106,7 +106,7 @@ public abstract class Espece {
         return individuProche;
     }
 
-    public void seReproduire() {
+    public void seReproduire(ArrayList <Espece> Espece) {
 
     }
 
@@ -169,7 +169,7 @@ public abstract class Espece {
     protected void allerVersCongenere (ArrayList <Espece> Espece) {
         if (trouverIndividuProche (Espece) != null) {
             allerVersPosition (trouverIndividuProche (Espece));
-            seReproduire ();
+            seReproduire (Espece);
         }
     }
 
