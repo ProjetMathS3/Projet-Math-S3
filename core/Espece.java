@@ -176,7 +176,7 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected abstract void jouerTour();
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur);
 
     public static void main(String[] args) {
         ArrayList<Espece> list = new ArrayList<Espece>();
