@@ -22,15 +22,15 @@ public class DisplayFrame extends JPanel {
         grid = new GridPanel(y, x,d);
         add( grid );
         //pack();
-        //setVisible( true );
+        setVisible( true );
     }
 
     // Définit les cellules de la grille avec des valeurs données dans un tableau de donnée(pas encore utilisé)
     public void setGrid( char [][] data ) {
-        /*for (int i = 0; i < data.length; i++ ) {
+        for (int i = 0; i < data.length; i++ ) {
             for (int j = 0; j < data[i].length; j++ ) {
                 grid.setGrid( i, j, data[i][j] );
             }
-        }*/
+        }
     }
 }

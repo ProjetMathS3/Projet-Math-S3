@@ -7,6 +7,16 @@ import java.awt.*;
 import java.beans.Expression;
 import javax.swing.*;
 import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+
 
 
 
@@ -19,6 +29,31 @@ public class CadrePrincipal extends JFrame {
     private JTextField champExpression;
     //private PanneauDessin dessin;
     private Expression expression = null;
+
+    //Bar de menu
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu test1 = new JMenu("Fichier");
+    private JMenu test1_2 = new JMenu("Sous ficher");
+    private JMenu test2 = new JMenu("Simulation");
+    private JMenu test3 = new  JMenu ("Affichage");
+    private JMenu test3_2 = new JMenu("Résolution ");
+
+    private JMenuItem item1 = new JMenuItem("Ouvrir");
+    private JMenuItem item2 = new JMenuItem("Fermer");
+    private JMenuItem item3 = new JMenuItem("Lancer ");
+    private JMenuItem item4 = new JMenuItem("Arrêter ");
+
+
+    private JCheckBoxMenuItem jcmi1 = new JCheckBoxMenuItem("Choix 1");
+    private JCheckBoxMenuItem jcmi2 = new JCheckBoxMenuItem("Choix 2");
+
+    private JRadioButtonMenuItem jrmi1 = new JRadioButtonMenuItem("Radio 1");
+    private JRadioButtonMenuItem jrmi2 = new JRadioButtonMenuItem("Radio 2");
+    private JRadioButtonMenuItem jrmi3 = new JRadioButtonMenuItem("1900 x 1080");
+    private JRadioButtonMenuItem jrmi4 = new JRadioButtonMenuItem("1600 x 900");
+
+
+
 
     public CadrePrincipal () {
         super ("Simulateur d'évolution");
@@ -60,39 +95,133 @@ public class CadrePrincipal extends JFrame {
 
             // panneau de gauche La grille !
             String largeur;
-            int l;
-            largeur=JOptionPane.showInputDialog(this,"largeur ");
-            l=Integer.parseInt(largeur);
+            int c;
+            largeur=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
+            c=Integer.parseInt(largeur);
             JPanel panneauDeGauche = new JPanel();
-            DisplayFrame disp = new DisplayFrame("Proie/Prédateur", l, 26, panneauDeGauche.getSize() );
+            // Choix dynamique de la taille de la grille en fonction du nombre de case
+            int hauteurG = (0);
+            int largeurG = (0);
+            if (c <= 10){
+                 hauteurG = (400);
+                 largeurG = (400);
+            }
+            else{
+                hauteurG = (800);
+                largeurG = (800);
+            }
+            Dimension Dim = new Dimension(hauteurG, largeurG );
+            DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
 
             panneauDeGauche.add(disp);
+
 
 
 
             // assemblage final
             JPanel panneauCentral = new JPanel();
             panneauCentral.setLayout(new GridLayout(1, 2));
+            panneauCentral.setSize(2*c,2*5);
             panneauCentral.add(panneauDeGauche);
             panneauCentral.add(panneauDeDroite);
 
 
             JPanel panneauTotal = new JPanel();
-            panneauTotal.setLayout(new BorderLayout(10, 10));
-            panneauTotal.add(panneauCentral, BorderLayout.CENTER);
+            //panneauTotal.setLayout(new BorderLayout(3, 3));
+            panneauTotal.add(panneauCentral);
 
-            panneauTotal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            setContentPane(panneauTotal);
+
+
+            //BAR DE MENU
+            //On initialise nos menus
+            this.test1.add(item1);
+
+            //On ajoute les éléments dans notre sous-menu
+            this.test1_2.add(jcmi1);
+            this.test1_2.add(jcmi2);
+            //Ajout d'un séparateur
+            this.test1_2.addSeparator();
+            //On met nos radios dans un ButtonGroup
+            ButtonGroup bg = new ButtonGroup();
+            bg.add(jrmi1);
+            bg.add(jrmi1);
+            //On présélectionne la première radio
+            jrmi1.setSelected(true);
+
+            this.test1_2.add(jrmi1);
+            this.test1_2.add(jrmi2);
+
+            //Ajout du sous-menu dans notre menu
+            this.test1.add(this.test1_2);
+            //Ajout d'un séparateur
+            this.test1.addSeparator();
+            item2.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent arg0) {
+                    System.exit(0);
+                }
+            });
+
+            //Ajout d'un séparateur
+            this.test3_2.addSeparator();
+            //On met nos radios dans un ButtonGroup
+            ButtonGroup bg2 = new ButtonGroup();
+            bg2.add(jrmi3);
+            bg2.add(jrmi4);
+            //On présélectionne la première radio
+            jrmi3.setSelected(true);
+
+            this.test3_2.add(jrmi3);
+            this.test3_2.add(jrmi4);
+            //Ajout d'un sous menu à notre menu
+            this.test3.add(this.test3_2);
+
+            this.test1.add(item2);
+            this.test2.add(item3);
+            this.test2.add(item4);
+
+
+            //L'ordre d'ajout va déterminer l'ordre d'apparition dans le menu de gauche à droite
+            //Le premier ajouté sera tout à gauche de la barre de menu et inversement pour le dernier
+            this.menuBar.add(test1);
+            this.menuBar.add(test2);
+            this.menuBar.add(test3);
+            this.setJMenuBar(menuBar);
+            this.setVisible(true);
+            int LE = 1900;
+            int HE = 1080;
+            //Ajout des listener au JMenuItem
+            jrmi3.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    setSize(1900,1080);
+                }
+            });
+            jrmi4.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    setSize(1006,900);
+                }
+            });
+            /*jrmi4.addActionListener(this);
+            jrmi2.addActionListener(this);
+            jrmi1.addActionListener(this);*/
+
+            //Action en fonction du choix utilisateur sur le menu
+
+
+            this.setJMenuBar(menuBar);
+            this.add(panneauTotal);
             setDefaultCloseOperation(EXIT_ON_CLOSE);
-            pack();
+
+            setSize(LE,HE);
+            //pack();
             setVisible(true);
 
     }
 
     public static void main(String[] args) {
-        JFrame.setDefaultLookAndFeelDecorated(true);
+        //JFrame.setDefaultLookAndFeelDecorated(true);
         new CadrePrincipal();
+
     }
 }
 
