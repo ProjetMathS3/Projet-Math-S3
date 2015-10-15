@@ -166,12 +166,12 @@ public abstract class Espece {
         }
     }
 
-    /*ALLERVERSCONGENERE - Comportement:
-      SI il y des congégères (aka même espèce),
-      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
-      SINON, elle ne fait rien
-     */
-    protected abstract void allerVersCongenere ();
+    private void allerVersCongenere (ArrayList <Espece> Espece) {
+        if (trouverIndividuProche (Espece)) {
+            allerVersPosition (trouverIndividuProche (Espece));
+            seReproduire ();
+        }
+    }
 
     /**
      * Jouer un tour de l'individu
@@ -183,5 +183,3 @@ public abstract class Espece {
         list.add(new Proie())
     }
 }
-
-

@@ -8,14 +8,6 @@ import java.util.ArrayList;
  */
 public class Proie extends Espece {
 
-    /**ISPREDATEURPRESENT - Comportement:
-      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
-     */
-    private boolean isPredateurPresent (){
-        //todo
-    } //predateurPresent
-
-
     /**OUFUIR - Comportement:
      * La proie va à l'opposé du prédateur le plus proche trouvé dans la limite de ses points de vitesse et de la taille de la carte
      */
@@ -35,22 +27,14 @@ public class Proie extends Espece {
         }
     } //fuir ()
 
-    /**PREDATEURPRESENT - Comportement:
-     * Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
-     */
-    private boolean isPredateurPresent () {
-        //todo
-    } //predateurPresent
-
-
     /**ALLERVERSCONGENERE - Comportement:
      * SI il y des congénères (aka même espèce),
      * ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
      * SINON, elle ne fait rien
      */
-    private void allerVersCongenere (this.espece) {
-        if (isCongenerePresent ()) {
-            allerVersPosition (congenereLePlusProche ());
+    private void allerVersCongenere (ArrayList <Espece> Espece) {
+        if (trouverIndividuProche (Espece)) {
+            allerVersPosition (trouverIndividuProche (Espece));
             seReproduire ();
         }
     }
