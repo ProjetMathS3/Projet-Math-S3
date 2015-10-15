@@ -1,6 +1,8 @@
 package core;
 
-import java.awt.*;
+import graphe.AfficheFonction;
+
+import java.util.ArrayList;
 
 /**
  * Created by r14003530 on 09/10/15.
@@ -28,46 +30,18 @@ public class Proie extends Espece {
       SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
       SINON, elle ne fait rien
      */
-    private void fuir() {
-        if (isPredateurPresent ()) {
+    private void fuir(ArrayList <Espece> Predateur) {
+        if (trouverIndividuProche(Predateur) != null) {
             allerVersPosition (ouFuir ());
         }
     } //fuir ()
 
-    /*PREDATEURPRESENT - Comportement:
-      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
-     */
-    private boolean isPredateurPresent () {
-        //todo
-    } //predateurPresent
-
-
-    /*CONGENERELEPLUSPROCHE - Comportement:
-      Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
-     */
-    private Point congenereLePlusProche () {
-        //todo
-    } //congenereLePlusProche
-
-
-    /*ALLERVERSCONGENERE - Comportement:
-      SI il y des congénères (aka même espèce),
-      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
-      SINON, elle ne fait rien
-     */
-    private void allerVersCongenere (this.espece) {
-        if (isCongenerePresent ()) {
-            allerVersPosition (congenereLePlusProche ());
-            seReproduire ();
-        }
-    }
-
-
     /*JOUERTOUR - Comportement:
+      La proie se reproduit si une autre est directement dans son entourage
       SI un prédateur ou plus est dans son champs de vision,
       ALORS la proie fuit,
       SINON SI une autre proie ou plus est dans son champs de vision,
-      ALORS elle se reproduit,
+      ALORS elle va vers elle pour se reproduir,
       SINON, elle ne fait rien
      */
     public void jouerTour() {
