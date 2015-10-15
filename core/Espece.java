@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by r14003530 on 09/10/15.
  */
-public class Espece {
+public abstract class Espece {
     private Point position;
     private int mouvementParTour;
     private int vision;
@@ -114,7 +114,7 @@ public class Espece {
 
     /**
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
-     * @param positionCible
+     * @param positionCible         position cible
      * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
@@ -145,7 +145,7 @@ public class Espece {
         }
     }
 
-    private void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
+    protected void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
         switch (direction) {
             case Haut:
                 seDeplacer(0, -1, positionsIndividus);
@@ -162,21 +162,23 @@ public class Espece {
         }
     }
 
-    private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
+    protected void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
             position.move(position.x + deltaX, position.y + deltaY);
         }
     }
-}
-
 
     /*ALLERVERSCONGENERE - Comportement:
       SI il y des congégères (aka même espèce),
       ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
       SINON, elle ne fait rien
      */
-    private void allerVersCongenere (this.espece) {
-        if (isCongenerePresent ()) {
-            allerVersPosition (CongenereLePlusProche);
-        }
-    }
+    protected abstract void allerVersCongenere ();
+
+    /**
+     * Jouer un tour de l'individu
+     */
+    protected abstract void jouerTour();
+}
+
+
