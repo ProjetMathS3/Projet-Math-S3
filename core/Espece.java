@@ -180,7 +180,9 @@ public abstract class Espece {
 
     public static void main(String[] args) {
         ArrayList<Espece> list = new ArrayList<Espece>();
-        list.add(new Proie())
+        list.add(new Predateur(2,3, 5));
+        list.add(new Predateur(2,6, 5));
+        System.out.println(list.get(0).trouverIndividuProche(list));
     }
 }
 

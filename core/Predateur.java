@@ -23,8 +23,9 @@ public class Predateur extends Espece {
         this.etatLimiteFaim = etatLimiteFaim;
     }
 
-    public Predateur (int x, int y){
+    public Predateur (int x, int y, double vision){
         this(new Point(x, y));
+        this.setVision(vision);
     }
 
 

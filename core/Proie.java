@@ -1,5 +1,8 @@
 package core;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 /**
  * Created by r14003530 on 09/10/15.
  */
@@ -32,13 +35,6 @@ public class Proie extends Espece {
         }
     } //fuir ()
 
-    /*PREDATEURPRESENT - Comportement:
-      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
-     */
-    private boolean isPredateurPresent () {
-        //todo
-    } //predateurPresent
-
 
     /*CONGENERELEPLUSPROCHE - Comportement:
       Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
@@ -53,7 +49,7 @@ public class Proie extends Espece {
       ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
       SINON, elle ne fait rien
      */
-    private void allerVersCongenere (this.espece) {
+    private void allerVersCongenere (ArrayList<Espece> especes) {
         if (isCongenerePresent ()) {
             allerVersPosition (congenereLePlusProche ());
             seReproduire ();
