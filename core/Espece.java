@@ -106,9 +106,13 @@ public abstract class Espece {
         return individuProche;
     }
 
-    public void seReproduire(ArrayList <Espece> Espece) {
+    /**
+     * Si un autre individu est sur la même case :
+     *  crée une nouvelle espèce sur une case adjacente
+     * @param especes   liste de proies ou de prédateurs
+     */
+    public abstract void seReproduire(ArrayList<Espece> especes);
 
-    }
 
     /**
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
@@ -118,7 +122,7 @@ public abstract class Espece {
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         int mouvementRestant = mouvementParTour;
 
-        while (mouvementRestant > 0) {
+        while (mouvementRestant > 0 && ! position.equals(positionCible)) {
             int distanceX = positionCible.x - position.x;
             int distanceY = positionCible.y - position.y;
 
@@ -166,11 +170,15 @@ public abstract class Espece {
         }
     }
 
-    protected void allerVersCongenere (ArrayList <Espece> Espece) {
-        if (trouverIndividuProche (Espece) != null) {
-            allerVersPosition (trouverIndividuProche (Espece));
-            seReproduire (Espece);
+    protected void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
+        Espece individuProche = trouverIndividuProche(especes);
+        if (individuProche != null) {
+            allerVersPosition (individuProche.getPosition(), positionEspeces);
         }
+    }
+
+    public void reinitTour() {
+        reprodui = false;
     }
 
     /**

@@ -1,5 +1,7 @@
 package core;
 
+import utils.Case;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -51,10 +53,23 @@ public class Predateur extends Espece {
 
     }
 
-    public void chasser(ArrayList<Espece> proiesList) {
-        if (trouverIndividuProche(proiesList) != null) {
-
+    public void chasser(ArrayList<Espece> proiesList, Case[][] positionsIndividus) {
+        Espece proieProche = trouverIndividuProche(proiesList);
+        if (proieProche != null) {
+            allerVersPosition(proieProche.getPosition(), positionsIndividus);
         }
+        if (this.getPosition().equals(proieProche.getPosition())) {
+            proieProche.mourir();
+            proiesList.remove(proieProche);
+        }
+    }
+
+    public void seReproduire(ArrayList<Espece> especes) {
+        // foreach (Espece e in especes)
+        especes.stream().filter(e -> getPosition().equals(e.getPosition())).forEach(e -> {
+            setReprodui(true);
+            e.setReprodui(true);
+        });
     }
 
     /*ALLERVERSCONGENERE - Comportement:
