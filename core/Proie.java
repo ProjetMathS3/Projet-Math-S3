@@ -1,57 +1,78 @@
 package core;
 
-import java.awt.*;
-import java.util.ArrayList;
-
 /**
  * Created by r14003530 on 09/10/15.
  */
 public class Proie extends Espece {
 
-    /**OUFUIR - Comportement:
-     * La proie va à l'opposé du prédateur le plus proche trouvé dans la limite de ses points de vitesse et de la taille de la carte
+    /*PREDATEURPRESENT - Comportement:
+      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
+     */
+    private boolean isPredateurPresent (){
+        //todo
+    } //predateurPresent
+
+
+    /*CONGENERELEPLUSPROCHE - Comportement:
+      Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
      */
     private Point ouFuir () {
         //todo
-    } //ouFuir
+    } //congenereLePlusProche
 
 
-    /**FUIR - Comportement:
+    /*FUIR - Comportement:
       La proie regarde dans son champs de vision (getVision) si il y a un ou plusieurs prédateurs
       SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
       SINON, elle ne fait rien
      */
-    private void fuir(ArrayList <Espece> Predateur) {
-        if (trouverIndividuProche (Predateur)) {
+    private void fuir() {
+        if (isPredateurPresent ()) {
             allerVersPosition (ouFuir ());
         }
     } //fuir ()
 
-    /**ALLERVERSCONGENERE - Comportement:
-     * SI il y des congénères (aka même espèce),
-     * ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
-     * SINON, elle ne fait rien
+    /*PREDATEURPRESENT - Comportement:
+      Renvoie TRUE uniquement si au moins un prédateur est dans le champs de vision (getVision) de la proie
      */
-    private void allerVersCongenere (ArrayList <Espece> Espece) {
-        if (trouverIndividuProche (Espece)) {
-            allerVersPosition (trouverIndividuProche (Espece));
+    private boolean isPredateurPresent () {
+        //todo
+    } //predateurPresent
+
+
+    /*CONGENERELEPLUSPROCHE - Comportement:
+      Parcourt le tableau d'espèce congénère et retourne le point du congénère le plus proche
+     */
+    private Point congenereLePlusProche () {
+        //todo
+    } //congenereLePlusProche
+
+
+    /*ALLERVERSCONGENERE - Comportement:
+      SI il y des congénères (aka même espèce),
+      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
+      SINON, elle ne fait rien
+     */
+    private void allerVersCongenere (this.espece) {
+        if (isCongenerePresent ()) {
+            allerVersPosition (congenereLePlusProche ());
             seReproduire ();
         }
     }
 
 
-    /**JOUERTOUR - Comportement:
-     * SI un prédateur ou plus est dans son champs de vision,
-     * ALORS la proie fuit,
-     * SINON SI une autre proie ou plus est dans son champs de vision,
-     * ALORS elle se reproduit,
-     * SINON, elle ne fait rien
+    /*JOUERTOUR - Comportement:
+      SI un prédateur ou plus est dans son champs de vision,
+      ALORS la proie fuit,
+      SINON SI une autre proie ou plus est dans son champs de vision,
+      ALORS elle se reproduit,
+      SINON, elle ne fait rien
      */
-    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur) {
+    public void jouerTour() {
         this.age += 1;
-        seReproduire (Proie);
-        fuir (Predateur);
-        allerVersCongenere (Proie);
+        seReproduire ();
+        fuir();
+        allerVersCongenere();
     } //jouerTour ()
 
 }
