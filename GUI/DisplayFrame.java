@@ -1,14 +1,11 @@
-package grille;
+package GUI;
 
 import javax.swing.*;
 
 
-
-import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
-// Affiche un cadre contenant une grille
+// Affiche un cadre contenant une GUI
 
 public class DisplayFrame extends JPanel {
     private GridPanel grid;
@@ -25,7 +22,7 @@ public class DisplayFrame extends JPanel {
         setVisible( true );
     }
 
-    // Définit les cellules de la grille avec des valeurs données dans un tableau de donnée(pas encore utilisé)
+    // Définit les cellules de la GUI avec des valeurs données dans un tableau de donnée(pas encore utilisé)
     public void setGrid( char [][] data ) {
         for (int i = 0; i < data.length; i++ ) {
             for (int j = 0; j < data[i].length; j++ ) {

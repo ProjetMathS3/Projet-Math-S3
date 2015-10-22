@@ -1,8 +1,7 @@
-package grille;
+package GUI;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 
 public class GridPanel extends JPanel {
