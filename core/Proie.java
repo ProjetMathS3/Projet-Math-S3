@@ -77,13 +77,13 @@ public class Proie extends Espece {
      * ALORS elle va vers elle pour se reproduir,
      * SINON, elle ne fait rien
      */
-    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice) {
-        seReproduire (Proie);
+    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice, int Generation) {
+        seReproduire (Proie, Generation);
         if (trouverIndividuProche(Predateur) != null)
             fuir (Predateur, MapSize, Matrice);
         else {
             allerVersCongenere(Proie, Matrice);
-            seReproduire(Proie);
+            seReproduire(Proie, Generation);
         }
     } //jouerTour ()
 

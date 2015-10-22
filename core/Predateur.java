@@ -54,7 +54,8 @@ public class Predateur extends Espece {
 
 
 
-    public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces) {
+    public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces, int Generation) {
+        seReproduire(predateurs, Generation);
         chasser(proies, posEspeces);
     }
 

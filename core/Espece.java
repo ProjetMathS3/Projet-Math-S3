@@ -137,6 +137,15 @@ public abstract class Espece {
         return null;
     }
 
+    public Espece trouverIndividuCaseAdjacente(ArrayList<Espece> list, int Generation) {
+        for (Espece e : list) {
+            if (estSurCaseAdjacente(e.getPosition())) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     private boolean estSurCaseAdjacente(Point positionATester) {
         return positionATester.equals(position) ||
                 (positionATester.x == position.x && positionATester.y == position.y + 1) ||
@@ -150,17 +159,22 @@ public abstract class Espece {
      *  crée une nouvelle espèce sur une case adjacente
      * @param especes   liste de proies ou de prédateurs
      */
-<<<<<<< Updated upstream
-    public void seReproduire(ArrayList<Espece> especes) {
 
-    }
-=======
->>>>>>> Stashed changes
-
-    public void seReproduire(ArrayList<Espece> espece) {
-        Espece CongenereDeGenerationLaPlusProche (position, 0);
-        while (trouverIndividuCaseAdjacente(espece) != null && trouverIndividuCaseAdjacente(espece).getClass() == this.getClass() && ! trouverIndividuCaseAdjacente(espece).isReprodui()) {
-            if (abs (generation - trouverIndividuCaseAdjacente(espece).getGeneration()) < CongenereDeGenerationLaPlusProche || CongenereDeGenerationLaPlusProche.getGeneration() = 0) {
+    public void seReproduire(ArrayList<Espece> espece, int Generation) {
+        Espece CongenereDeGenerationLaPlusProche = null;
+        while (trouverIndividuCaseAdjacente(espece) != null
+                && trouverIndividuCaseAdjacente(espece).getClass() == this.getClass()
+                && ! trouverIndividuCaseAdjacente(espece).isReprodui()) {
+            if (abs (generation - trouverIndividuCaseAdjacente(espece).getGeneration()) < CongenereDeGenerationLaPlusProche
+                    || CongenereDeGenerationLaPlusProche == null) {
+                CongenereDeGenerationLaPlusProche = trouverIndividuProche(espece);
+            }
+        }
+        setReprodui(true);
+        trouverIndividuCaseAdjacente(espece).setReprodui(true);
+        if (this instanceof Proie) {
+            Proie NouveauNe = new Proie (PlaceLibre(), Generation);
+            espece.add(NouveauNe);
         }
     }
 
@@ -244,7 +258,7 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp) {}
+    protected void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int Generation) {}
 
     @Override
     public String toString() {
