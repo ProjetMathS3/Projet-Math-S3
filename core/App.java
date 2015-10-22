@@ -3,6 +3,7 @@ package core;
 import utils.Case;
 
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 
 /**
@@ -58,17 +59,44 @@ public class App {
         }
     }
 
+    public void jouerTour(Espece e) {
+        e.jouerTour(proies, predateurs, positionsEspeces);
+    }
+
+    public void afficherPositions() {
+        for (int y = 0; y < TAILLE_MAP; y++) {
+            for (int x = 0; x < TAILLE_MAP; x++) {
+                System.out.print(String.format("%10s",  positionsEspeces[x][y]));
+            }
+            System.out.println();
+        }
+    }
+
 
     public static void main(String[] args) {
         App app = new App();
+        int tour = 1;
 
         Predateur pred = new Predateur(3, 3, 1);
         app.ajouterEspece(pred);
         pred = new Predateur(4, 5, 1);
         app.ajouterEspece(pred);
 
-        for (Espece e : app.getPredateurs()) {
-            System.out.println(e);
+        Proie proie = new Proie(6, 3, 1);
+        app.ajouterEspece(proie);
+
+        while (tour <= 3) {
+            System.out.println(app.getProies());
+            app.afficherPositions();
+
+            for (Espece e : app.getProies()) {
+                app.jouerTour(e);
+            }
+            for (Espece e : app.getPredateurs()) {
+                app.jouerTour(e);
+            }
+
+            tour++;
         }
     }
 }
