@@ -17,12 +17,16 @@ public class Proie extends Espece {
         super(position, generation);
     }
 
+    public Proie(int x, int y, int generation) {
+        super(new Point(x,y), generation);
+    }
+
     /**OUFUIR - Comportement:
      * Définit un point opposé à la position du predateur le plus proche
      */
     private Point ouFuir () {
         //todo
-        return null;
+        return new Point(0,0);
     } //ouFuir ()
 
 

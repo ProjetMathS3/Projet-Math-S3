@@ -159,6 +159,7 @@ public abstract class Espece {
      * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
+        System.out.println("Aller vers pos" + positionCible);
         int mouvementRestant = mouvementParTour;
         boolean bloque = false;
 
