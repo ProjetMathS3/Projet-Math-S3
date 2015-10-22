@@ -11,13 +11,13 @@ import java.util.ArrayList;
  */
 public abstract class Espece {
     private Point position;
-    private int mouvementParTour;
-    private double vision;
-    private int tempsReproduction;
-    private int frequenceReproduction;
-    private int dureeDeVie;
     private int generation;
-    private boolean reprodui;
+    private int mouvementParTour = 1;
+    private double vision = 10;
+    private int nombreReproduction = 1;
+    private int frequenceReproduction = 5;
+    private int dureeDeVie = 20;
+    private boolean reprodui = false;
 
 
     public Point getPosition() {
@@ -44,12 +44,12 @@ public abstract class Espece {
         this.vision = vision;
     }
 
-    public int getTempsReproduction() {
-        return tempsReproduction;
+    public int getnombreReproduction() {
+        return nombreReproduction;
     }
 
-    public void setTempsReproduction(int tempsReproduction) {
-        this.tempsReproduction = tempsReproduction;
+    public void setnombreReproduction(int nombreReproduction) {
+        this.nombreReproduction = nombreReproduction;
     }
 
     public int getFrequenceReproduction() {
@@ -84,6 +84,28 @@ public abstract class Espece {
         this.reprodui = reprodui;
     }
 
+
+    // Constructeurs
+    public Espece(Point position, int generation) {
+        this.position = position;
+        this.generation = generation;
+    }
+
+    public Espece(Point position, int mouvementParTour, int generation) {
+        this.position = position;
+        this.mouvementParTour = mouvementParTour;
+        this.generation = generation;
+    }
+
+    public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
+        this.position = position;
+        this.mouvementParTour = mouvementParTour;
+        this.vision = vision;
+        this.nombreReproduction = nombreReproduction;
+        this.frequenceReproduction = frequenceReproduction;
+        this.dureeDeVie = dureeDeVie;
+        this.generation = generation;
+    }
 
     /**
      * Renvoie l'individu le plus proche dans list
@@ -202,12 +224,26 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur);
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp);
+
+    @Override
+    public String toString() {
+        return "{" +
+                "position=" + position +
+                ", generation=" + generation +
+                ", mouvementParTour=" + mouvementParTour +
+                ", vision=" + vision +
+                ", nombreReproduction=" + nombreReproduction +
+                ", frequenceReproduction=" + frequenceReproduction +
+                ", dureeDeVie=" + dureeDeVie +
+                ", reprodui=" + reprodui +
+                '}';
+    }
 
     public static void main(String[] args) {
         ArrayList<Espece> list = new ArrayList<Espece>();
-        list.add(new Predateur(2,3, 5));
-        list.add(new Predateur(2,6, 5));
+/*        list.add(new Predateur(2,3, 5));
+        list.add(new Predateur(2,6, 5));*/
         System.out.println(list.get(0).trouverIndividuProche(list));
     }
 }

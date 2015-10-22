@@ -13,23 +13,28 @@ public class Predateur extends Espece {
     private int niveauFaim;
     private int etatLimiteFaim;
 
-    public Predateur(Point position) {
-        this.setPosition(position);
-        this.setVision(0);
+    public Predateur(Point position, int generation) {
+        super(position, generation);
     }
 
-    public Predateur(Point position, double vision, int niveauFaim, int etatLimiteFaim) {
-        this(position);
-        this.setVision(vision);
-        this.niveauFaim = niveauFaim;
+    public Predateur(int x, int y, int generation) {
+        this(new Point(x,y), generation);
+    }
+
+    public Predateur(Point position, int generation, int etatLimiteFaim) {
+        super(position, generation);
         this.etatLimiteFaim = etatLimiteFaim;
     }
 
-    public Predateur (int x, int y, double vision){
-        this(new Point(x, y));
-        this.setVision(vision);
+    public Predateur(Point position, int mouvementParTour, int generation, int etatLimiteFaim) {
+        super(position, mouvementParTour, generation);
+        this.etatLimiteFaim = etatLimiteFaim;
     }
 
+    public Predateur(Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation, int etatLimiteFaim) {
+        super(position, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, generation);
+        this.etatLimiteFaim = etatLimiteFaim;
+    }
 
     public int getEtatLimiteFaim() {
         return etatLimiteFaim;
@@ -49,8 +54,8 @@ public class Predateur extends Espece {
 
 
 
-    public void jouerTour() {
-
+    public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces) {
+        System.out.println("Tour prédateur joué !");
     }
 
     public void chasser(ArrayList<Espece> proiesList, Case[][] positionsIndividus) {
@@ -58,18 +63,14 @@ public class Predateur extends Espece {
         if (proieProche != null) {
             allerVersPosition(proieProche.getPosition(), positionsIndividus);
         }
-        if (this.getPosition().equals(proieProche.getPosition())) {
+/*        if (this.getPosition().equals(proieProche.getPosition())) {
             proieProche.mourir();
             proiesList.remove(proieProche);
-        }
+        }*/
     }
 
     public void seReproduire(ArrayList<Espece> especes) {
-        // foreach (Espece e in especes)
-        especes.stream().filter(e -> getPosition().equals(e.getPosition())).forEach(e -> {
-            setReprodui(true);
-            e.setReprodui(true);
-        });
+        //todo
     }
 
     /*ALLERVERSCONGENERE - Comportement:
@@ -78,8 +79,16 @@ public class Predateur extends Espece {
       SINON, elle ne fait rien
      */
     private void allerVersCongenere () {
-        if (isCongenerePresent ()) {
+/*        if (isCongenerePresent ()) {
             allerVersPosition (CongenereLePlusProche);
-        }
+        }*/
+    }
+
+    @Override
+    public String toString() {
+        return "Predateur{" +  super.toString() +
+                ", niveauFaim=" + niveauFaim +
+                ", etatLimiteFaim=" + etatLimiteFaim +
+                "} ";
     }
 }
