@@ -17,6 +17,8 @@ public class Proie extends Espece {
      * Définit un point opposé à la position du predateur le plus proche
      */
     private Point ouFuir () {
+
+
         Point Position = new Point (getPosition ());
         Point VecteurDirection;
         Point Deplacement = Position;
