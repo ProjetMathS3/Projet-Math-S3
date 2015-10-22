@@ -1,3 +1,5 @@
+package graphe;
+
 public class LodkaVolterra {
 
 	private double m_ValMax = 0 ;
