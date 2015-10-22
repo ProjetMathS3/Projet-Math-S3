@@ -13,16 +13,26 @@ import java.util.ArrayList;
  */
 public class Proie extends Espece {
 
-    public Proie(Point position, int generation) {
-        super(position, generation);
-    }
-
     /**OUFUIR - Comportement:
      * Définit un point opposé à la position du predateur le plus proche
      */
     private Point ouFuir () {
-        //todo
-        return null;
+        Point Position = new Point (getPosition ());
+        Point VecteurDirection;
+        Point Deplacement = Position;
+        
+        while (Deplacement.x <= getMapSize () && Deplacement.x > 0) {
+            Deplacement.x += VecteurDirection.x;
+        }
+        for (int i = 0; i != (VecteurDirection.x + 1) && Deplacement.x <= getMapSize () && Deplacement.x > 0; ++i) {
+            ++Deplacement.x;
+        }
+        while ((Position.y + Deplacement.y) <= getMapSize () && Deplacement.y > 0) {
+            Deplacement.y += VecteurDirection.y;
+        }
+        for (int i = 0; i != (VecteurDirection.y + 1) && Deplacement.y <= getMapSize () && Deplacement.y > 0; ++i) {
+            ++Deplacement.y;
+        }
     } //ouFuir ()
 
 
@@ -31,14 +41,9 @@ public class Proie extends Espece {
      * SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
      * SINON, elle ne fait rien
      */
-    private void fuir (ArrayList <Espece> Predateur, Case[][] posEspeces) {
-        allerVersPosition (ouFuir (), posEspeces);
+    private void fuir (ArrayList <Espece> Predateur) {
+        allerVersPosition (ouFuir ());
     } //fuir ()
-
-    @Override
-    public void seReproduire(ArrayList<Espece> especes) {
-
-    }
 
     /**JOUERTOUR - Comportement:
      * La proie se reproduit si une autre est directement dans son entourage
@@ -48,18 +53,15 @@ public class Proie extends Espece {
      * ALORS elle va vers elle pour se reproduir,
      * SINON, elle ne fait rien
      */
-    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEspeces) {
+    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur) {
+        ++this.age;
         seReproduire (Proie);
         if (trouverIndividuProche(Predateur) != null)
-            fuir (Predateur, positionsEspeces);
+            fuir (Predateur);
         else {
-            allerVersCongenere(Proie, positionsEspeces);
+            allerVersCongenere(Proie);
             seReproduire(Proie);
         }
     } //jouerTour ()
 
-    @Override
-    public String toString() {
-        return "Proie{} " + super.toString();
-    }
 }
