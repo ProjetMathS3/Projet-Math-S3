@@ -1,10 +1,5 @@
 package core;
 
-import graphe.AfficheFonction;
-
-import utils.Case;
-import utils.Directions;
-
 import java.awt.*;
 import java.util.ArrayList;
 
