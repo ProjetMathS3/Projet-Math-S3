@@ -2,7 +2,7 @@ package core;
 
 import utils.Case;
 import utils.Directions;
-
+import java.lang.Math;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -150,10 +150,19 @@ public abstract class Espece {
      *  crée une nouvelle espèce sur une case adjacente
      * @param especes   liste de proies ou de prédateurs
      */
+<<<<<<< Updated upstream
     public void seReproduire(ArrayList<Espece> especes) {
 
     }
+=======
+>>>>>>> Stashed changes
 
+    public void seReproduire(ArrayList<Espece> espece) {
+        Espece CongenereDeGenerationLaPlusProche (position, 0);
+        while (trouverIndividuCaseAdjacente(espece) != null && trouverIndividuCaseAdjacente(espece).getClass() == this.getClass() && ! trouverIndividuCaseAdjacente(espece).isReprodui()) {
+            if (abs (generation - trouverIndividuCaseAdjacente(espece).getGeneration()) < CongenereDeGenerationLaPlusProche || CongenereDeGenerationLaPlusProche.getGeneration() = 0) {
+        }
+    }
 
     /**
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
@@ -224,7 +233,7 @@ public abstract class Espece {
     protected void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
-            allerVersPosition (individuProche.getPosition(), positionEspeces);
+            allerVersPosition(individuProche.getPosition(), positionEspeces);
         }
     }
 
