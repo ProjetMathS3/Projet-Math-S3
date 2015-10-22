@@ -1,10 +1,5 @@
 package core;
 
-import graphe.AfficheFonction;
-
-import utils.Case;
-import utils.Directions;
-
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -58,6 +53,11 @@ public class Proie extends Espece {
         }
         return Deplacement;
     } //ouFuir ()
+
+
+    public void mourir(Case[][] positionsEspeces) {
+        positionsEspeces[getPosition().x][getPosition().y] = Case.Vide;
+    }
 
 
     /**FUIR - Comportement:

@@ -89,7 +89,7 @@ public class App {
         Proie proie = new Proie(6, 3, 1);
         app.ajouterEspece(proie);
 
-        while (tour <= 8) {
+        while (tour <= 11) {
             System.out.println();
 
             System.out.println(app.getProies());
