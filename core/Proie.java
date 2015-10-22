@@ -19,12 +19,21 @@ public class Proie extends Espece {
         super(position, generation);
     }
 
+    public Proie (int x, int y, int generation) {
+        super(new Point(x,y), generation);
+    }
+
     public Proie (Point position, int mouvementParTour, int generation) {
         super(position, mouvementParTour, generation);
     }
 
     public Proie (Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
         super(position, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, generation);
+    }
+
+    @Override
+    protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp) {
+
     }
 
     /**OUFUIR - Comportement:
@@ -61,7 +70,7 @@ public class Proie extends Espece {
      * SINON, elle ne fait rien
      */
     private void fuir (ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice) {
-        allerVersPosition (ouFuir (Predateur, MapSize), Matrice);
+        allerVersPosition(ouFuir(Predateur, MapSize), Matrice);
     } //fuir ()
 
     /**JOUERTOUR - Comportement:

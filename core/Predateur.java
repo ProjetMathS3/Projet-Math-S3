@@ -69,10 +69,6 @@ public class Predateur extends Espece {
         }*/
     }
 
-    public void seReproduire(ArrayList<Espece> especes) {
-        //todo
-    }
-
     /*ALLERVERSCONGENERE - Comportement:
       SI il y des congégères (aka même espèce),
       ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
