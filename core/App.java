@@ -63,6 +63,10 @@ public class App {
         e.jouerTour(proies, predateurs, positionsEspeces);
     }
 
+    public void jouerTour(Proie p) {
+        p.jouerTour(proies, predateurs, positionsEspeces, TAILLE_MAP);
+    }
+
     public void afficherPositions() {
         for (int y = 0; y < TAILLE_MAP; y++) {
             for (int x = 0; x < TAILLE_MAP; x++) {
@@ -85,12 +89,14 @@ public class App {
         Proie proie = new Proie(6, 3, 1);
         app.ajouterEspece(proie);
 
-        while (tour <= 3) {
+        while (tour <= 8) {
+            System.out.println();
+
             System.out.println(app.getProies());
             app.afficherPositions();
 
             for (Espece e : app.getProies()) {
-                app.jouerTour(e);
+                app.jouerTour((Proie)e);
             }
             for (Espece e : app.getPredateurs()) {
                 app.jouerTour(e);
