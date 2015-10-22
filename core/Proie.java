@@ -13,28 +13,45 @@ import java.util.ArrayList;
  */
 public class Proie extends Espece {
 
+    //CONSTRUCTEURS
+
+    public Proie (Point position, int generation) {
+        super(position, generation);
+    }
+
+    public Proie (Point position, int mouvementParTour, int generation) {
+        super(position, mouvementParTour, generation);
+    }
+
+    public Proie (Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
+        super(position, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, generation);
+    }
+
     /**OUFUIR - Comportement:
      * Définit un point opposé à la position du predateur le plus proche
      */
-    private Point ouFuir () {
+    private Point ouFuir (ArrayList <Espece> Predateur, int MapSize) {
+
 
 
         Point Position = new Point (getPosition ());
-        Point VecteurDirection;
-        Point Deplacement = Position;
+        Point PositionPredateur = new Point(trouverIndividuProche(Predateur).getPosition());
+        Point VecteurDirection = new Point (Position.x - PositionPredateur.x, Position.y - PositionPredateur.y);
+        Point Deplacement = new Point (Position);
         
-        while (Deplacement.x <= getMapSize () && Deplacement.x > 0) {
+        while (Deplacement.x <= MapSize && Deplacement.x > 0) {
             Deplacement.x += VecteurDirection.x;
         }
-        for (int i = 0; i != (VecteurDirection.x + 1) && Deplacement.x <= getMapSize () && Deplacement.x > 0; ++i) {
+        for (int i = 0; i != (VecteurDirection.x + 1) && Deplacement.x <= MapSize && Deplacement.x > 0; ++i) {
             ++Deplacement.x;
         }
-        while ((Position.y + Deplacement.y) <= getMapSize () && Deplacement.y > 0) {
+        while ((Position.y + Deplacement.y) <= MapSize && Deplacement.y > 0) {
             Deplacement.y += VecteurDirection.y;
         }
-        for (int i = 0; i != (VecteurDirection.y + 1) && Deplacement.y <= getMapSize () && Deplacement.y > 0; ++i) {
+        for (int i = 0; i != (VecteurDirection.y + 1) && Deplacement.y <= MapSize && Deplacement.y > 0; ++i) {
             ++Deplacement.y;
         }
+        return Deplacement;
     } //ouFuir ()
 
 
@@ -43,8 +60,8 @@ public class Proie extends Espece {
      * SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche
      * SINON, elle ne fait rien
      */
-    private void fuir (ArrayList <Espece> Predateur) {
-        allerVersPosition (ouFuir ());
+    private void fuir (ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice) {
+        allerVersPosition (ouFuir (Predateur, MapSize), Matrice);
     } //fuir ()
 
     /**JOUERTOUR - Comportement:
@@ -55,13 +72,12 @@ public class Proie extends Espece {
      * ALORS elle va vers elle pour se reproduir,
      * SINON, elle ne fait rien
      */
-    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur) {
-        ++this.age;
+    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice) {
         seReproduire (Proie);
         if (trouverIndividuProche(Predateur) != null)
-            fuir (Predateur);
+            fuir (Predateur, MapSize, Matrice);
         else {
-            allerVersCongenere(Proie);
+            allerVersCongenere(Proie, Matrice);
             seReproduire(Proie);
         }
     } //jouerTour ()
