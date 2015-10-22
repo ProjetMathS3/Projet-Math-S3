@@ -60,6 +60,11 @@ public class Proie extends Espece {
     } //ouFuir ()
 
 
+    public void mourir(Case[][] positionsEspeces) {
+        positionsEspeces[getPosition().x][getPosition().y] = Case.Vide;
+    }
+
+
     /**FUIR - Comportement:
      * La proie regarde dans son champs de vision (getVision) si il y a un ou plusieurs prédateurs
      * SI c'est le cas, ALORS elle se déplace dans la direction opposé au prédateur le plus proche

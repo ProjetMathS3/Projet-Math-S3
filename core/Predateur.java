@@ -55,7 +55,7 @@ public class Predateur extends Espece {
 
 
     public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces) {
-        System.out.println("Tour prédateur joué !");
+        chasser(proies, posEspeces);
     }
 
     public void chasser(ArrayList<Espece> proiesList, Case[][] positionsIndividus) {
@@ -63,10 +63,15 @@ public class Predateur extends Espece {
         if (proieProche != null) {
             allerVersPosition(proieProche.getPosition(), positionsIndividus);
         }
-/*        if (this.getPosition().equals(proieProche.getPosition())) {
-            proieProche.mourir();
-            proiesList.remove(proieProche);
-        }*/
+        Proie p = (Proie)trouverIndividuCaseAdjacente(proiesList);
+        if (p != null) {
+            System.out.println("PROIE DED");
+            p.mourir(positionsIndividus);
+            if (getMouvementParTour() > 0) {
+                allerVersPosition(p.getPosition(), positionsIndividus);
+            }
+            proiesList.remove(p);
+        }
     }
 
     /*ALLERVERSCONGENERE - Comportement:
