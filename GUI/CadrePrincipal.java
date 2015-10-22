@@ -1,12 +1,11 @@
 /**
  * Created by w14007405 on 09/10/15.
  */
-package grille;
+package GUI;
 
 import java.awt.*;
 import java.beans.Expression;
 import javax.swing.*;
-import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
@@ -99,21 +98,25 @@ public class CadrePrincipal extends JFrame {
             JPanel panneauDeDroite = new JPanel();
             panneauDeDroite.add(panneauDeParametres);
 
-            // panneau de gauche La grille !
+            // panneau de gauche La GUI !
             String taille;
             taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
             c=Integer.parseInt(taille);
             JPanel panneauDeGauche = new JPanel();
-            // Choix dynamique de la taille de la grille en fonction du nombre de case
+            // Choix dynamique de la taille de la GUI en fonction du nombre de case
             int hauteurG = (0);
             int largeurG = (0);
             if (c <= 10){
                  hauteurG = (400);
                  largeurG = (400);
             }
-            else{
+            else if(c > 10 && c <= 20){
                 hauteurG = (500);
                 largeurG = (500);
+            }
+            else if(c > 20 && c <= 200){
+                hauteurG = (800);
+                largeurG = (800);
             }
             Dimension Dim = new Dimension(hauteurG, largeurG );
             DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
