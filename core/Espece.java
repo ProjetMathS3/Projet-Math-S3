@@ -207,7 +207,9 @@ public abstract class Espece {
 
     private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
+            positionsIndividus[position.x][position.y] = Case.Vide;
             position.move(position.x + deltaX, position.y + deltaY);
+
         }
     }
 
