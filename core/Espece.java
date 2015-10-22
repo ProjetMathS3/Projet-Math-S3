@@ -150,7 +150,9 @@ public abstract class Espece {
      *  crée une nouvelle espèce sur une case adjacente
      * @param especes   liste de proies ou de prédateurs
      */
-    public abstract void seReproduire(ArrayList<Espece> especes);
+    public void seReproduire(ArrayList<Espece> especes) {
+
+    }
 
 
     /**
@@ -205,11 +207,17 @@ public abstract class Espece {
         }
     }
 
+    private boolean estCaseValide(int x, int y, int tailleMap) {
+        return x >= 0 && x < tailleMap
+                && y >= 0 && y < tailleMap;
+    }
+
     private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
-        if (positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
+        if (estCaseValide(position.x + deltaX, position.y + deltaY, positionsIndividus.length) && positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
+            System.out.println("Case adjacente " + (position.x + deltaX) + ";" + (position.y + deltaY));
             positionsIndividus[position.x][position.y] = Case.Vide;
             position.move(position.x + deltaX, position.y + deltaY);
-
+            positionsIndividus[position.x][position.y] = (this instanceof Proie ? Case.Proie : Case.Predateur);
         }
     }
 
@@ -227,7 +235,7 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp);
+    protected void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp) {}
 
     @Override
     public String toString() {
