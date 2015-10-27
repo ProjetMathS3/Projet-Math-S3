@@ -3,6 +3,8 @@
  */
 package GUI;
 
+import org.jfree.chart.plot.CategoryMarker;
+
 import java.awt.*;
 import java.beans.Expression;
 import javax.swing.*;
@@ -15,8 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
-
-
+import javax.swing.table.JTableHeader;
 
 
 public class CadrePrincipal extends JFrame {
@@ -62,90 +63,12 @@ public class CadrePrincipal extends JFrame {
 
     public CadrePrincipal () {
         super ("Simulateur d'évolution");
+        JPanel panneauDeGauche = InitAndAddPanneauDeGauche(); //Initialise le panneau de gauche avec la grille et les paramètres
+        JPanel panneauDuBas = InitAndAddTableau();
 
 
-        //Panneau à droite Les paramètres !
-        champsParametres = new JTextField[nombreParametres];
-        Box panneauDeParametres = new Box(BoxLayout.Y_AXIS);
-        for (int i = 0; i < nombreParametres; ++i) {
-            JLabel etiquette = new JLabel(nomsParametres[i]);
-            etiquette.setPreferredSize(new Dimension(300, 20)); //Modifie la taille pour le text des param (300) et 20 c'est la hauteur de l'input
-
-            JTextField champ = champsParametres[i] = new JTextField(6);
-            champ.setHorizontalAlignment(JTextField.RIGHT);
-            champ.setFont(new Font("Monospaced", Font.PLAIN, 12));
-            champ.setText("" + valeurParametres[i]);
-
-            Box uneLigne = new Box(BoxLayout.X_AXIS);
-            uneLigne.add(etiquette);
-            uneLigne.add(champ);
-            panneauDeParametres.add(uneLigne);
-            if (2 == i)
-                panneauDeParametres.add(Box.createVerticalStrut(10));
-        }
-
-            JButton bouton = new JButton("Mise à jour des paramètres");
-            panneauDeParametres.add(Box.createVerticalStrut(10));
-            panneauDeParametres.add(bouton);
-
-            panneauDeParametres.setBorder(
-                    BorderFactory.createCompoundBorder(
-                            BorderFactory.createTitledBorder(
-                                    BorderFactory.createEtchedBorder(),
-                                    "Paramètres"),
-                            BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
+        //Partie à droite : Les graphiques
             JPanel panneauDeDroite = new JPanel();
-            panneauDeDroite.setMinimumSize(new Dimension(300,200));
-            panneauDeDroite.add(panneauDeParametres);
-
-            // panneau de gauche La GUI !
-            String taille;
-            taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
-            c=Integer.parseInt(taille);
-            JPanel panneauDeGauche = new JPanel();
-            // Choix dynamique de la taille de la GUI en fonction du nombre de case
-            int hauteurG = (0);
-            int largeurG = (0);
-            if (c <= 10){
-                 hauteurG = (400);
-                 largeurG = (400);
-            }
-            else if(c > 10 && c <= 20){
-                hauteurG = (500);
-                largeurG = (500);
-            }
-            else if(c > 20 && c <= 200){
-                hauteurG = (800);
-                largeurG = (800);
-            }
-            Dimension Dim = new Dimension(hauteurG, largeurG );
-            DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
-
-            panneauDeGauche.add(disp);
-
-            //Panneau Affichage nombres espèces
-            JPanel panneauDuBas = new JPanel();
-            panneauDuBas.setLayout(new FlowLayout());
-            panneauDuBas.setBackground(Color.WHITE);
-            JLabel NombresEspèces = new JLabel("Nombres proie : 12, Nombre prédateur : 36");
-            panneauDuBas.add(NombresEspèces);
-
-
-
-
-
-            // assemblage final
-            JPanel AffichageApplication = new JPanel();
-            AffichageApplication.setLayout(new BorderLayout());
-            //AffichageApplication.setSize(2*c,2*5);
-            AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
-            AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
-            AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
-
-
-
-
 
             //BAR DE MENU
             //On initialise nos menus
@@ -237,19 +160,213 @@ public class CadrePrincipal extends JFrame {
             });
 
 
+            if (c > 20 && LE <= 1600) {
+                String[] Resolution = {"1900 * 1080", "Automatique", "Continuez avec cette résolution"};
+                JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
+                String Res = (String)jop.showInputDialog(null,
+                        "La résolution avec la qu'elle vous lancer l'application risque de créer des soucis d'affichage, veuillez saisir une autre résolution",
+                        "Problème d'affichage",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        Resolution,
+                        Resolution[2]);
+                if (Res == "1900 * 1080"){ setSize(1900, 1080);
+                                           OrdiIUT.setSelected(true);
+                    jop2.showMessageDialog(null, "Votre résolution est " + Res, "Résolution changée", JOptionPane.INFORMATION_MESSAGE);
+                }
+                if (Res == "Continuez avec cette résolution"){
+                    setSize(LE,HE);
+                    jop2.showMessageDialog(null, "Votre résolution actuelle peut entrainer un problème d'affichage, si c'est le cas, veuillez la modifier dans l'onglet affichage", "Résolution inchangée", JOptionPane.WARNING_MESSAGE);
+                }
+                if (Res == "Automatique"){
+                    int largeurEcran =(int)tailleEcran.getHeight();
+                    int HauteurEcran =(int)tailleEcran.getWidth();
+                    if (largeurEcran < 1600) {
+                        jop2.showMessageDialog(null, "Votre résolution d'écran est trop faible pour afficher correctement la grille avec cette taille ", "Résolution trop faible", JOptionPane.ERROR_MESSAGE);
+                    }
+                        int ResTailleG = Integer.parseInt(jop.showInputDialog(null, "Veuillez saisir la nouvelle taille de la grille ( inférieure à la précédente)", "Nouvelle taille de la grille", JOptionPane.QUESTION_MESSAGE));
+                        c = ResTailleG;
+                    panneauDeGauche = InitAndAddPanneauDeGaucheAutomatique();
 
-            this.setJMenuBar(menuBar);
-            this.add(AffichageApplication);
+                }
 
-            setDefaultCloseOperation(EXIT_ON_CLOSE);
+                // assemblage final
+                JPanel AffichageApplication = new JPanel();
+                AffichageApplication.setLayout(new BorderLayout());
+                AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
+                AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
+                AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
 
-            setSize(LE,HE);
-            pack();
-            setVisible(true);
-            setResizable(false);//Interdit le redimensionnement à la main
+                this.setJMenuBar(menuBar);
+                this.add(AffichageApplication);
 
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+                setVisible(true);
+                //setResizable(false);//Interdit le redimensionnement à la main
+            }
+
+            else {
+                // assemblage final
+                JPanel AffichageApplication = new JPanel();
+                AffichageApplication.setLayout(new BorderLayout());
+                AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
+                AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
+                AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
+
+                this.setJMenuBar(menuBar);
+                this.add(AffichageApplication);
+
+                setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+                setSize(LE, HE);
+                pack();
+                setVisible(true);
+                setResizable(false);//Interdit le redimensionnement à la main
+            }
     }
+
+    private JPanel InitAndAddTableau() {
+        //Panneau du bas : Affichage nombres espèces
+        Object[][] donnees = {
+                {"1000", "1300", "13000", true},
+                {"999", "952", "12596", true},
+                {"840", "450", "14000", true},
+                {"756", "940", "26", false},
+                {"648", "800", "1000", false},
+                {"698", "1100", "5946", false},
+                {"750", "1200", "6541", true}
+        };
+        String[] entetes = {"Proie", "prédateur", "Nourriture"};
+        JTable tableau = new JTable(donnees, entetes);
+        JTableHeader header = tableau.getTableHeader();
+        JPanel panneauDuBas = new JPanel();
+        panneauDuBas.setLayout(new BorderLayout());
+        panneauDuBas.add(header, BorderLayout.NORTH);
+        panneauDuBas.add(tableau, BorderLayout.CENTER);
+        return panneauDuBas;
+    }
+
+    private JPanel InitAndAddPanneauDeGauche() {
+        //Panneau à gauche partie I : Les paramètres !
+        champsParametres = new JTextField[nombreParametres];
+        Box panneauDeParametres = new Box(BoxLayout.Y_AXIS);
+        for (int i = 0; i < nombreParametres; ++i) {
+            JLabel etiquette = new JLabel(nomsParametres[i]);
+            etiquette.setPreferredSize(new Dimension(300, 20)); //Modifie la taille pour le text des param (300) et 20 c'est la hauteur de l'input
+
+            JTextField champ = champsParametres[i] = new JTextField(6);
+            champ.setHorizontalAlignment(JTextField.RIGHT);
+            champ.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            champ.setText("" + valeurParametres[i]);
+
+            Box uneLigne = new Box(BoxLayout.X_AXIS);
+            uneLigne.add(etiquette);
+            uneLigne.add(champ);
+            panneauDeParametres.add(uneLigne);
+            if (2 == i)
+                panneauDeParametres.add(Box.createVerticalStrut(10));
+        }
+
+        JButton bouton = new JButton("Mise à jour des paramètres");
+        panneauDeParametres.add(Box.createVerticalStrut(10));
+        panneauDeParametres.add(bouton);
+
+        panneauDeParametres.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(),
+                                "Paramètres"),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        //Panneau de gauche partie II : La grille
+        String taille;
+        taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
+        c=Integer.parseInt(taille);
+        JPanel panneauDeGauche = new JPanel();
+        // Choix dynamique de la taille de la grille en fonction du nombre de case
+        int hauteurG = (0);
+        int largeurG = (0);
+        if (c <= 10){
+            hauteurG = (400);
+            largeurG = (400);
+        }
+        else if(c > 10 && c <= 20){
+            hauteurG = (500);
+            largeurG = (500);
+        }
+        else if(c > 20 && c <= 200){
+            hauteurG = (800);
+            largeurG = (800);
+        }
+        Dimension Dim = new Dimension(hauteurG, largeurG );
+        DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
+
+        panneauDeGauche.add(disp);
+        panneauDeGauche.add(panneauDeParametres);
+        return panneauDeGauche;
+    }
+
+    private JPanel InitAndAddPanneauDeGaucheAutomatique() { //Ne redemande pas la taille de la grille, choisit comme taille de fenêtre la résolution de l'écran de l'utilisateur
+        //Panneau à gauche partie I : Les paramètres !
+        champsParametres = new JTextField[nombreParametres];
+        Box panneauDeParametres = new Box(BoxLayout.Y_AXIS);
+        for (int i = 0; i < nombreParametres; ++i) {
+            JLabel etiquette = new JLabel(nomsParametres[i]);
+            etiquette.setPreferredSize(new Dimension(300, 20)); //Modifie la taille pour le text des param (300) et 20 c'est la hauteur de l'input
+
+            JTextField champ = champsParametres[i] = new JTextField(6);
+            champ.setHorizontalAlignment(JTextField.RIGHT);
+            champ.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            champ.setText("" + valeurParametres[i]);
+
+            Box uneLigne = new Box(BoxLayout.X_AXIS);
+            uneLigne.add(etiquette);
+            uneLigne.add(champ);
+            panneauDeParametres.add(uneLigne);
+            if (2 == i)
+                panneauDeParametres.add(Box.createVerticalStrut(10));
+        }
+
+        JButton bouton = new JButton("Mise à jour des paramètres");
+        panneauDeParametres.add(Box.createVerticalStrut(10));
+        panneauDeParametres.add(bouton);
+
+        panneauDeParametres.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(),
+                                "Paramètres"),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        //Panneau de gauche partie II : La grille
+        JPanel panneauDeGauche = new JPanel();
+        // Choix dynamique de la taille de la grille en fonction du nombre de case
+        int hauteurG = (0);
+        int largeurG = (0);
+        if (c <= 10){
+            hauteurG = (400);
+            largeurG = (400);
+        }
+        else if(c > 10 && c <= 20){
+            hauteurG = (500);
+            largeurG = (500);
+        }
+        else if(c > 20 && c <= 200){
+            hauteurG = (800);
+            largeurG = (800);
+        }
+        Dimension Dim = new Dimension(hauteurG, largeurG );
+        DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
+        Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
+        int LargeurEcran =(int)tailleEcran.getHeight();
+        int HauteurEcran =(int)tailleEcran.getWidth();
+        setSize(HauteurEcran,LargeurEcran);
+
+        panneauDeGauche.add(disp);
+        panneauDeGauche.add(panneauDeParametres);
+        return panneauDeGauche;
+    }
+
+
 
     public static void main(String[] args) {
         //JFrame.setDefaultLookAndFeelDecorated(true);
