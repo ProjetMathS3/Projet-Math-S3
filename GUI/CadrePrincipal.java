@@ -123,19 +123,25 @@ public class CadrePrincipal extends JFrame {
 
             panneauDeGauche.add(disp);
 
+            //Panneau Affichage nombres espèces
+            JPanel panneauDuBas = new JPanel();
+            panneauDuBas.setLayout(new FlowLayout());
+            panneauDuBas.setBackground(Color.WHITE);
+            JLabel NombresEspèces = new JLabel("Nombres proie : 12, Nombre prédateur : 36");
+            panneauDuBas.add(NombresEspèces);
+
+
 
 
 
             // assemblage final
-            JPanel panneauCentral = new JPanel();
-            panneauCentral.setLayout(new BorderLayout());
-            //panneauCentral.setSize(2*c,2*5);
-            panneauCentral.add(panneauDeGauche, BorderLayout.WEST);
-            panneauCentral.add(panneauDeDroite, BorderLayout.CENTER);
+            JPanel AffichageApplication = new JPanel();
+            AffichageApplication.setLayout(new BorderLayout());
+            //AffichageApplication.setSize(2*c,2*5);
+            AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
+            AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
+            AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
 
-
-            final JPanel panneauTotal = new JPanel();
-            panneauTotal.add(panneauCentral);
 
 
 
@@ -235,7 +241,7 @@ public class CadrePrincipal extends JFrame {
 
 
             this.setJMenuBar(menuBar);
-            this.add(panneauTotal);
+            this.add(AffichageApplication);
 
             setDefaultCloseOperation(EXIT_ON_CLOSE);
 
