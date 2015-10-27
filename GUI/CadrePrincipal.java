@@ -50,10 +50,10 @@ public class CadrePrincipal extends JFrame {
 
     private JRadioButtonMenuItem jrmi1 = new JRadioButtonMenuItem("Radio 1");
     private JRadioButtonMenuItem jrmi2 = new JRadioButtonMenuItem("Radio 2");
-    private JRadioButtonMenuItem jrmi3 = new JRadioButtonMenuItem("1900 x 1080");
-    private JRadioButtonMenuItem jrmi4 = new JRadioButtonMenuItem("1600 x 900");
-    private JRadioButtonMenuItem jrmi5 = new JRadioButtonMenuItem("1366 x 768");
-    private JRadioButtonMenuItem jrmi6 = new JRadioButtonMenuItem("Automatique");
+    private JRadioButtonMenuItem OrdiIUT = new JRadioButtonMenuItem("1900 x 1080");
+    private JRadioButtonMenuItem MoyenneRes = new JRadioButtonMenuItem("1600 x 900");
+    private JRadioButtonMenuItem petiteRes = new JRadioButtonMenuItem("1366 x 768");
+    private JRadioButtonMenuItem automatique = new JRadioButtonMenuItem("Automatique");
 
 
 
@@ -96,6 +96,7 @@ public class CadrePrincipal extends JFrame {
                             BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
             JPanel panneauDeDroite = new JPanel();
+            panneauDeDroite.setMinimumSize(new Dimension(300,200));
             panneauDeDroite.add(panneauDeParametres);
 
             // panneau de gauche La GUI !
@@ -179,17 +180,17 @@ public class CadrePrincipal extends JFrame {
             this.test3_2.addSeparator();
             //On met nos radios dans un ButtonGroup
             ButtonGroup bg2 = new ButtonGroup();
-            bg2.add(jrmi6);
-            bg2.add(jrmi3);
-            bg2.add(jrmi4);
-            bg2.add(jrmi5);
+            bg2.add(automatique);
+            bg2.add(OrdiIUT);
+            bg2.add(MoyenneRes);
+            bg2.add(petiteRes);
             //On présélectionne la première radio
-            jrmi6.setSelected(true);
+            automatique.setSelected(true);
 
-            this.test3_2.add(jrmi6);
-            this.test3_2.add(jrmi3);
-            this.test3_2.add(jrmi4);
-            this.test3_2.add(jrmi5);
+            this.test3_2.add(automatique);
+            this.test3_2.add(OrdiIUT);
+            this.test3_2.add(MoyenneRes);
+            this.test3_2.add(petiteRes);
             //Ajout d'un sous menu à notre menu
             this.test3.add(this.test3_2);
 
@@ -209,35 +210,32 @@ public class CadrePrincipal extends JFrame {
             final int LE = (int)tailleEcran.getHeight();
             final int HE = (int)tailleEcran.getWidth();
             //Ajout des listener au JMenuItem
-            jrmi3.addActionListener(new ActionListener() {
+            OrdiIUT.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    setSize(1900,1080);
+                    setSize(1900, 1080);
 
                 }
             });
-            jrmi4.addActionListener(new ActionListener() {
+            MoyenneRes.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    setSize(1600,900);
+                    setSize(1600, 900);
 
 
                 }
             });
-            jrmi5.addActionListener(new ActionListener() {
+            petiteRes.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    setSize(1366,768);
+                    setSize(1366, 768);
 
                 }
             });
-            jrmi6.addActionListener(new ActionListener() {
+            automatique.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent evt) {
-                    setSize(LE,HE);
+                    setSize(LE, HE);
                     pack();
                 }
             });
 
-            /* Test Mode pleine écran
-
-             */
 
 
             this.setJMenuBar(menuBar);
@@ -248,6 +246,7 @@ public class CadrePrincipal extends JFrame {
             setSize(LE,HE);
             pack();
             setVisible(true);
+            setResizable(false);//Interdit le redimensionnement à la main
 
 
     }
