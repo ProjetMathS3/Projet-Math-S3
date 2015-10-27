@@ -203,7 +203,7 @@ public class CadrePrincipal extends JFrame {
                 setDefaultCloseOperation(EXIT_ON_CLOSE);
 
                 setVisible(true);
-                //setResizable(false);//Interdit le redimensionnement à la main
+                setResizable(false);//Interdit le redimensionnement à la main
             }
 
             else {
@@ -294,9 +294,13 @@ public class CadrePrincipal extends JFrame {
             hauteurG = (500);
             largeurG = (500);
         }
-        else if(c > 20 && c <= 200){
+        else if(c > 20 && c <= 100){
             hauteurG = (800);
             largeurG = (800);
+        }
+        else if(c > 100 && c < 200){
+            hauteurG = (900);
+            largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
         DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
@@ -350,9 +354,13 @@ public class CadrePrincipal extends JFrame {
             hauteurG = (500);
             largeurG = (500);
         }
-        else if(c > 20 && c <= 200){
+        else if(c > 20 && c <= 100){
             hauteurG = (800);
             largeurG = (800);
+        }
+        else if(c > 100 && c < 200){
+            hauteurG = (900);
+            largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
         DisplayFrame disp = new DisplayFrame("Proie/Prédateur", c, c, Dim);
