@@ -3,6 +3,7 @@
  */
 package GUI;
 
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.CategoryMarker;
 
 import java.awt.*;
@@ -18,6 +19,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.table.JTableHeader;
+import GUI.AfficheGraphe;
 
 
 public class CadrePrincipal extends JFrame {
@@ -67,8 +69,6 @@ public class CadrePrincipal extends JFrame {
         JPanel panneauDuBas = InitAndAddTableau();
 
 
-        //Partie à droite : Les graphiques
-            JPanel panneauDeDroite = new JPanel();
 
             //BAR DE MENU
             //On initialise nos menus
@@ -129,7 +129,7 @@ public class CadrePrincipal extends JFrame {
             this.menuBar.add(test3);
             this.setJMenuBar(menuBar);
             this.setVisible(true);
-            Dimension tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+            Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
             final int LE = (int)tailleEcran.getHeight();
             final int HE = (int)tailleEcran.getWidth();
             //Ajout des listener au JMenuItem
@@ -194,7 +194,7 @@ public class CadrePrincipal extends JFrame {
                 JPanel AffichageApplication = new JPanel();
                 AffichageApplication.setLayout(new BorderLayout());
                 AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
-                AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
+                //AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
                 AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
 
                 this.setJMenuBar(menuBar);
@@ -211,7 +211,7 @@ public class CadrePrincipal extends JFrame {
                 JPanel AffichageApplication = new JPanel();
                 AffichageApplication.setLayout(new BorderLayout());
                 AffichageApplication.add(panneauDeGauche, BorderLayout.WEST);
-                AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
+                //AffichageApplication.add(panneauDeDroite, BorderLayout.CENTER);
                 AffichageApplication.add(panneauDuBas, BorderLayout.SOUTH);
 
                 this.setJMenuBar(menuBar);
