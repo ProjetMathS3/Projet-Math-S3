@@ -3,7 +3,6 @@ package core;
 import utils.Case;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +23,7 @@ public class Predateur extends Espece {
     public Predateur(Point position, int generation, int etatLimiteFaim) {
         super(position, generation);
         this.etatLimiteFaim = etatLimiteFaim;
+        this.niveauFaim = etatLimiteFaim;
     }
 
     public Predateur(Point position, int mouvementParTour, int generation, int etatLimiteFaim) {
@@ -54,9 +54,12 @@ public class Predateur extends Espece {
 
 
 
-    public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces, int Generation) {
-        seReproduire(predateurs, Generation);
+    public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces, int tour, int mapSize, ArrayList<Espece> buffer) {
+        if (niveauFaim < etatLimiteFaim) {
+            seReproduire(predateurs, posEspeces, tour, buffer);
+        }
         chasser(proies, posEspeces);
+        niveauFaim++;
     }
 
     public void chasser(ArrayList<Espece> proiesList, Case[][] positionsIndividus) {
@@ -72,6 +75,7 @@ public class Predateur extends Espece {
                 allerVersPosition(p.getPosition(), positionsIndividus);
             }
             proiesList.remove(p);
+            niveauFaim = 0;
         }
     }
 

@@ -2,9 +2,8 @@ package core;
 
 import utils.Case;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by r14003530 on 22/10/15.
@@ -15,6 +14,7 @@ public class App {
 
     ArrayList<Espece> proies;
     ArrayList<Espece> predateurs;
+    ArrayList<Espece> buffer;
     Case[][] positionsEspeces;
 
     public ArrayList<Espece> getProies() {
@@ -23,6 +23,10 @@ public class App {
 
     public ArrayList<Espece> getPredateurs() {
         return predateurs;
+    }
+
+    public ArrayList<Espece> getBuffer() {
+        return buffer;
     }
 
     public Case[][] getPositionsEspeces() {
@@ -34,6 +38,7 @@ public class App {
     public App() {
         proies = new ArrayList<>();
         predateurs = new ArrayList<>();
+        buffer = new ArrayList<>();
 
         positionsEspeces = new Case[TAILLE_MAP][TAILLE_MAP];
         for (int x = 0; x < TAILLE_MAP; ++x) {
@@ -59,12 +64,8 @@ public class App {
         }
     }
 
-    public void jouerTour(Espece e) {
-        e.jouerTour(proies, predateurs, positionsEspeces);
-    }
-
-    public void jouerTour(Proie p) {
-        p.jouerTour(proies, predateurs, positionsEspeces, TAILLE_MAP);
+    public void jouerTour(Espece e, int tour, ArrayList<Espece> buffer) {
+        e.jouerTour(proies, predateurs, positionsEspeces, tour, TAILLE_MAP, buffer);
     }
 
     public void afficherPositions() {
@@ -81,7 +82,7 @@ public class App {
         App app = new App();
         int tour = 1;
 
-        Predateur pred = new Predateur(3, 3, 1);
+        Predateur pred = new Predateur(3, 5, 1);
         app.ajouterEspece(pred);
         pred = new Predateur(4, 5, 1);
         app.ajouterEspece(pred);
@@ -92,14 +93,23 @@ public class App {
         while (tour <= 11) {
             System.out.println();
 
-            System.out.println(app.getProies());
             app.afficherPositions();
 
             for (Espece e : app.getProies()) {
-                app.jouerTour((Proie)e);
+                app.jouerTour(e, tour, app.getBuffer());
             }
-            for (Espece e : app.getPredateurs()) {
-                app.jouerTour(e);
+
+            Iterator<Espece> it = app.getPredateurs().iterator();
+            while(it.hasNext()) {
+                Espece e = it.next();
+                app.jouerTour(e, tour, app.getBuffer());
+                if (tour > e.getGeneration() + e.getDureeDeVie()) {
+                    it.remove();
+                }
+            }
+
+            for (Espece e : app.getBuffer()) {
+                app.ajouterEspece(e);
             }
 
             tour++;

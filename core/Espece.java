@@ -2,9 +2,10 @@ package core;
 
 import utils.Case;
 import utils.Directions;
-import java.lang.Math;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by r14003530 on 09/10/15.
@@ -16,7 +17,7 @@ public abstract class Espece {
     private double vision = 10;
     private int nombreReproduction = 1;
     private int frequenceReproduction = 5;
-    private int dureeDeVie = 20;
+    private int dureeDeVie = 5;
     private boolean reprodui = false;
 
 
@@ -137,18 +138,8 @@ public abstract class Espece {
         return null;
     }
 
-    public Espece trouverIndividuCaseAdjacente(ArrayList<Espece> list, int Generation) {
-        for (Espece e : list) {
-            if (estSurCaseAdjacente(e.getPosition())) {
-                return e;
-            }
-        }
-        return null;
-    }
-
     private boolean estSurCaseAdjacente(Point positionATester) {
-        return positionATester.equals(position) ||
-                (positionATester.x == position.x && positionATester.y == position.y + 1) ||
+        return (positionATester.x == position.x && positionATester.y == position.y + 1) ||
                 (positionATester.x == position.x && positionATester.y == position.y - 1) ||
                 (positionATester.x == position.x + 1 && positionATester.y == position.y) ||
                 (positionATester.x == position.x - 1 && positionATester.y == position.y);
@@ -160,21 +151,51 @@ public abstract class Espece {
      * @param especes   liste de proies ou de prédateurs
      */
 
-    public void seReproduire(ArrayList<Espece> espece, int Generation) {
-        Espece CongenereDeGenerationLaPlusProche = null;
-        while (trouverIndividuCaseAdjacente(espece) != null
-                && trouverIndividuCaseAdjacente(espece).getClass() == this.getClass()
-                && ! trouverIndividuCaseAdjacente(espece).isReprodui()) {
-            if (abs (generation - trouverIndividuCaseAdjacente(espece).getGeneration()) < CongenereDeGenerationLaPlusProche
-                    || CongenereDeGenerationLaPlusProche == null) {
-                CongenereDeGenerationLaPlusProche = trouverIndividuProche(espece);
+    public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, int Generation, ArrayList<Espece> buffer) {
+        Espece CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
+/*        while (CongenereDeGenerationLaPlusProche != null &&
+                CongenereDeGenerationLaPlusProche.getClass() == this.getClass() &&
+                ! CongenereDeGenerationLaPlusProche.isReprodui()) {
+            if (Math.abs (generation - CongenereDeGenerationLaPlusProche.getGeneration()) < CongenereDeGenerationLaPlusProche.getGeneration()) {
+                CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
             }
+        }*/
+
+        if (CongenereDeGenerationLaPlusProche != null) {
+            setReprodui(true);
+            CongenereDeGenerationLaPlusProche.setReprodui(true);
+            Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
+            Espece nouveauNe;
+            if (this instanceof Proie) {
+                nouveauNe = new Proie (positionNouveauNe, Generation);
+            }
+            else {
+                nouveauNe = new Predateur(positionNouveauNe, Generation);
+            }
+            buffer.add(nouveauNe);
         }
-        setReprodui(true);
-        trouverIndividuCaseAdjacente(espece).setReprodui(true);
-        if (this instanceof Proie) {
-            Proie NouveauNe = new Proie (PlaceLibre(), Generation);
-            espece.add(NouveauNe);
+    }
+
+    private Point choisirCaseNaissance(Espece e1, Espece e2, Case[][] positionsEspeces) {
+        ArrayList<Point> casesDisponibles = new ArrayList<>();
+        for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
+            ajouterCaseDispo(e1, positionsEspeces, deltaX, 0, casesDisponibles);
+            ajouterCaseDispo(e2, positionsEspeces, deltaX, 0, casesDisponibles);
+        }
+        for (int deltaY = -1; deltaY <= 1; deltaY += 2) {
+            ajouterCaseDispo(e1, positionsEspeces, 0, deltaY, casesDisponibles);
+            ajouterCaseDispo(e2, positionsEspeces, 0, deltaY, casesDisponibles);
+        }
+
+        Random rand = new Random();
+        return casesDisponibles.get(rand.nextInt(casesDisponibles.size()));
+    }
+
+    private void ajouterCaseDispo(Espece e, Case[][] positionsEspeces, int deltaX, int deltaY, ArrayList<Point> casesDisponibles) {
+        Point caseAdjacente = new Point(e.getPosition());
+        caseAdjacente.translate(deltaX, deltaY);
+        if (caseAdjacente.x < 0 || caseAdjacente.y >= positionsEspeces.length || positionsEspeces[caseAdjacente.x][caseAdjacente.y] != Case.Vide) {
+            casesDisponibles.add(caseAdjacente);
         }
     }
 
@@ -184,7 +205,6 @@ public abstract class Espece {
      * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
-        System.out.println("Aller vers pos" + positionCible);
         int mouvementRestant = mouvementParTour;
         boolean bloque = false;
 
@@ -237,14 +257,17 @@ public abstract class Espece {
 
     private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (estCaseValide(position.x + deltaX, position.y + deltaY, positionsIndividus.length) && positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
-            System.out.println("Case adjacente " + (position.x + deltaX) + ";" + (position.y + deltaY));
             positionsIndividus[position.x][position.y] = Case.Vide;
             position.move(position.x + deltaX, position.y + deltaY);
             positionsIndividus[position.x][position.y] = (this instanceof Proie ? Case.Proie : Case.Predateur);
         }
     }
 
-    protected void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
+    /**
+     * Se déplace vers le congénère le plus proche
+     * @param especes   liste des congénères
+     */
+    public void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
             allerVersPosition(individuProche.getPosition(), positionEspeces);
@@ -258,7 +281,7 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int Generation) {}
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int Generation, int mapSize, ArrayList<Espece> buffer);
 
     @Override
     public String toString() {
@@ -275,9 +298,27 @@ public abstract class Espece {
     }
 
     public static void main(String[] args) {
-        ArrayList<Espece> list = new ArrayList<Espece>();
-/*        list.add(new Predateur(2,3, 5));
-        list.add(new Predateur(2,6, 5));*/
-        System.out.println(list.get(0).trouverIndividuProche(list));
+        Predateur e1 = new Predateur(5,1, 9);
+        Predateur e2 = new Predateur(9, 6, 9);
+
+        ArrayList<Point> casesDisponibles = new ArrayList<>();
+        for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
+            Point caseAdjacente = new Point(e1.getPosition());
+            caseAdjacente.translate(deltaX, 0);
+            casesDisponibles.add(caseAdjacente);
+
+            caseAdjacente = new Point(e2.getPosition());
+            caseAdjacente.translate(deltaX, 0);
+            casesDisponibles.add(caseAdjacente);
+        }
+        for (int deltaY = -1; deltaY <= 1; deltaY += 2) {
+            Point caseAdjacente = new Point(e1.getPosition());
+            caseAdjacente.translate(0, deltaY);
+            casesDisponibles.add(caseAdjacente);
+
+            caseAdjacente = new Point(e2.getPosition());
+            caseAdjacente.translate(0, deltaY);
+            casesDisponibles.add(caseAdjacente);
+        }
     }
 }

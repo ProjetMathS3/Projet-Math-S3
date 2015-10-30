@@ -1,5 +1,7 @@
 package core;
 
+import utils.Case;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -26,8 +28,23 @@ public class Proie extends Espece {
         super(position, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, generation);
     }
 
-    protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp, int mapsize) {
-        fuir(Predateur, mapsize, positionsEsp);
+
+    /**JOUERTOUR - Comportement:
+     * La proie se reproduit si une autre est directement dans son entourage
+     * SI un prédateur ou plus est dans son champs de vision,
+     * ALORS la proie fuit,
+     * SINON SI une autre proie ou plus est dans son champs de vision,
+     * ALORS elle va vers elle pour se reproduir,
+     * SINON, elle ne fait rien
+     */
+    protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp, int generation, int mapSize, ArrayList<Espece> buffer) {
+        seReproduire (Proie, positionsEsp, generation, buffer);
+        if (trouverIndividuProche(Predateur) != null)
+            fuir (Predateur, mapSize, positionsEsp);
+        else {
+            allerVersCongenere(Proie, positionsEsp);
+            seReproduire(Proie, positionsEsp, generation, buffer);
+        }
     }
 
     /**OUFUIR - Comportement:
@@ -68,23 +85,4 @@ public class Proie extends Espece {
     private void fuir (ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice) {
         allerVersPosition(ouFuir(Predateur, MapSize), Matrice);
     } //fuir ()
-
-    /**JOUERTOUR - Comportement:
-     * La proie se reproduit si une autre est directement dans son entourage
-     * SI un prédateur ou plus est dans son champs de vision,
-     * ALORS la proie fuit,
-     * SINON SI une autre proie ou plus est dans son champs de vision,
-     * ALORS elle va vers elle pour se reproduir,
-     * SINON, elle ne fait rien
-     */
-    public void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, int MapSize, Case[][] Matrice, int Generation) {
-        seReproduire (Proie, Generation);
-        if (trouverIndividuProche(Predateur) != null)
-            fuir (Predateur, MapSize, Matrice);
-        else {
-            allerVersCongenere(Proie, Matrice);
-            seReproduire(Proie, Generation);
-        }
-    } //jouerTour ()
-
 }
