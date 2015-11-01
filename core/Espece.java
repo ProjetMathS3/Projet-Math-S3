@@ -12,12 +12,11 @@ import java.util.Random;
  */
 public abstract class Espece {
     private Point position;
-    private int generation;
     private int mouvementParTour = 2;
     private double vision = 15;
     private int nombreReproduction = 1;
-    private int frequenceReproduction = 2;
-    private int tempsDerniereReproduction = frequenceReproduction;
+    private int periodeReproduction = 2;
+    private int tempsDerniereReproduction = periodeReproduction;
     private int dureeDeVie = 3;
     private boolean reprodui = false;
 
@@ -55,11 +54,11 @@ public abstract class Espece {
     }
 
     public int getFrequenceReproduction() {
-        return frequenceReproduction;
+        return periodeReproduction;
     }
 
-    public void setFrequenceReproduction(int frequenceReproduction) {
-        this.frequenceReproduction = frequenceReproduction;
+    public void setFrequenceReproduction(int periodeReproduction) {
+        this.periodeReproduction = periodeReproduction;
     }
 
     public int getDureeDeVie() {
@@ -68,14 +67,6 @@ public abstract class Espece {
 
     public void setDureeDeVie(int dureeDeVie) {
         this.dureeDeVie = dureeDeVie;
-    }
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
     }
 
     public boolean isReprodui() {
@@ -95,28 +86,25 @@ public abstract class Espece {
     }
 
     // Constructeurs
-    public Espece(Point position, int generation) {
+    public Espece(Point position) {
         this.position = position;
-        this.generation = generation;
-        this.tempsDerniereReproduction = this.frequenceReproduction;
+        this.tempsDerniereReproduction = this.periodeReproduction;
     }
 
-    public Espece(Point position, int mouvementParTour, int generation) {
+    public Espece(Point position, int mouvementParTour) {
         this.position = position;
         this.mouvementParTour = mouvementParTour;
-        this.generation = generation;
-        this.tempsDerniereReproduction = this.frequenceReproduction;
+        this.tempsDerniereReproduction = this.periodeReproduction;
     }
 
-    public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
+    public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int periodeReproduction, int dureeDeVie) {
         this.position = position;
         this.mouvementParTour = mouvementParTour;
         this.vision = vision;
         this.nombreReproduction = nombreReproduction;
-        this.frequenceReproduction = frequenceReproduction;
-        this.tempsDerniereReproduction = frequenceReproduction;
+        this.periodeReproduction = periodeReproduction;
+        this.tempsDerniereReproduction = periodeReproduction;
         this.dureeDeVie = dureeDeVie;
-        this.generation = generation;
     }
 
     /**
@@ -161,25 +149,25 @@ public abstract class Espece {
      *  crée une nouvelle espèce sur une case adjacente
      * @param especes   liste de proies ou de prédateurs
      */
-    public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, int Generation, ArrayList<Espece> buffer) {
-        Espece CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
+    public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, ArrayList<Espece> buffer) {
+        Espece Congenere = trouverIndividuCaseAdjacente(espece);
 
-        if (CongenereDeGenerationLaPlusProche != null && ! CongenereDeGenerationLaPlusProche.isReprodui() && ! isReprodui() &&
-                tempsDerniereReproduction > frequenceReproduction) {
-            System.out.println("bim");
+        if (Congenere != null && ! Congenere.isReprodui() && ! isReprodui() &&
+                tempsDerniereReproduction > periodeReproduction) {
+            System.out.println("papa dans maman!");
             tempsDerniereReproduction = 0;
             setReprodui(true);
-            CongenereDeGenerationLaPlusProche.setReprodui(true);
+            Congenere.setReprodui(true);
             for (int i=0; i < nombreReproduction; i++) {
-                Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
+                Point positionNouveauNe = choisirCaseNaissance(this, Congenere, positionsEspeces);
                 if (positionNouveauNe != null) {
-                    System.out.println(CongenereDeGenerationLaPlusProche.getClass().toString() + positionNouveauNe);
+                    System.out.println(Congenere.getClass().toString() + positionNouveauNe);
                     Espece nouveauNe;
                     if (this instanceof Proie) {
-                        nouveauNe = new Proie (positionNouveauNe, Generation);
+                        nouveauNe = new Proie (positionNouveauNe);
                     }
                     else {
-                        nouveauNe = new Predateur(positionNouveauNe, Generation);
+                        nouveauNe = new Predateur(positionNouveauNe);
                     }
                     buffer.add(nouveauNe);
                 }
@@ -305,22 +293,17 @@ public abstract class Espece {
     /**
      * Jouer un tour de l'individu
      */
-    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int Generation, int mapSize, ArrayList<Espece> buffer);
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int mapSize, ArrayList<Espece> buffer);
 
     @Override
     public String toString() {
         return "Espece{" +
                 "position=" + position +
-                ", generation=" + generation +
                 ", mouvementParTour=" + mouvementParTour +
                 ", vision=" + vision +
                 ", nombreReproduction=" + nombreReproduction +
-                ", frequenceReproduction=" + frequenceReproduction +
+                ", periodeReproduction=" + periodeReproduction +
                 ", dureeDeVie=" + dureeDeVie +
                 '}';
-    }
-
-    public static void main(String[] args) {
-
     }
 }
