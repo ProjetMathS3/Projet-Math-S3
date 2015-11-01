@@ -131,7 +131,7 @@ public abstract class Espece {
         double distanceLocale;
         for (int i = 0; i < list.size(); ++i) {
             distanceLocale = position.distance(list.get(i).getPosition()); // Distance entre l'espece courante et l'espece i dans la liste
-            if (distanceLocale < distancePlusProche) {
+            if (distanceLocale < distancePlusProche && ! equals(list.get(i))) {
                 distancePlusProche = distanceLocale;
                 individuProche = list.get(i);
             }
@@ -288,6 +288,8 @@ public abstract class Espece {
     public void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
+            System.out.println(individuProche);
+            System.out.println(getPosition());
             allerVersPosition(individuProche.getPosition(), positionEspeces);
         }
     }
@@ -307,9 +309,14 @@ public abstract class Espece {
 
     @Override
     public String toString() {
-        return "{" +
+        return "Espece{" +
                 "position=" + position +
                 ", generation=" + generation +
+                ", mouvementParTour=" + mouvementParTour +
+                ", vision=" + vision +
+                ", nombreReproduction=" + nombreReproduction +
+                ", frequenceReproduction=" + frequenceReproduction +
+                ", dureeDeVie=" + dureeDeVie +
                 '}';
     }
 
