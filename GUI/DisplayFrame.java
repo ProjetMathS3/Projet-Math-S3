@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class DisplayFrame extends JPanel {
     private GridPanel grid;
-
+/*
     // Accepte une chaine de caractère comme titre,
     //  x:Nombre de colonnes
     //  y: Nombre de lignes
@@ -29,5 +29,5 @@ public class DisplayFrame extends JPanel {
                 grid.setGrid( i, j, data[i][j] );
             }
         }
-    }
+    }*/
 }

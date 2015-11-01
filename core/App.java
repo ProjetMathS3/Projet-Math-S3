@@ -12,11 +12,13 @@ import java.util.Iterator;
 public class App {
 
     static final int TAILLE_MAP = 20;
+    static final int NB_TOURS = 20;
 
     ArrayList<Espece> proies;
     ArrayList<Espece> predateurs;
     ArrayList<Espece> buffer;
     Case[][] positionsEspeces;
+    int gridSize;
 
     public ArrayList<Espece> getProies() {
         return proies;
@@ -36,17 +38,76 @@ public class App {
 
 
 
-    public App() {
+    public App(int gridSize) {
         proies = new ArrayList<>();
         predateurs = new ArrayList<>();
         buffer = new ArrayList<>();
+        this.gridSize = gridSize;
 
-        positionsEspeces = new Case[TAILLE_MAP][TAILLE_MAP];
-        for (int x = 0; x < TAILLE_MAP; ++x) {
-            for (int y = 0; y < TAILLE_MAP; ++y) {
+        positionsEspeces = new Case[gridSize][gridSize];
+        for (int x = 0; x < gridSize; ++x) {
+            for (int y = 0; y < gridSize; ++y) {
                 positionsEspeces[x][y] = Case.Vide;
             }
         }
+
+        System.out.println("App created with size " + gridSize);
+    }
+
+    public void jouerSimulation(int nbTours) {
+        int tour = 1;
+
+/*        // Valeurs de test
+        Predateur pred = new Predateur(3, 5, 1);
+        ajouterEspece(pred);
+        pred = new Predateur(4, 5, 1);
+        ajouterEspece(pred);
+
+*/
+
+
+        Proie proie = new Proie(5, 3, 1);
+        ajouterEspece(proie);
+        proie = new Proie(3, 4, 1);
+        ajouterEspece(proie);
+
+        int[] nbProies = new int[nbTours];
+        int[] nbPreds = new int[nbTours];
+
+        while (tour <= nbTours) {
+            System.out.println();
+            System.out.println(tour);
+
+            afficherPositions();
+
+            System.out.println(getProies());
+            for (Espece e : getProies()) {
+                jouerTour(e, tour, getBuffer());
+            }
+
+            Iterator<Espece> it = getPredateurs().iterator();
+            while(it.hasNext()) {
+                Espece e = it.next();
+                jouerTour(e, tour, getBuffer());
+                if (tour > e.getGeneration() + e.getDureeDeVie()) {
+                    e.mourir(getPositionsEspeces());
+                    it.remove();
+                }
+            }
+
+            for (Espece e : getBuffer()) {
+                ajouterEspece(e);
+            }
+
+            nbProies[tour - 1] = getProies().size();
+            nbPreds[tour - 1] = getPredateurs().size();
+
+            tour++;
+        }
+
+        AfficheGraphe graphe = new AfficheGraphe("Graphe", nbProies, nbPreds);
+        graphe.pack();
+        graphe.setVisible(true);
     }
 
     public void ajouterEspece(Espece e) {
@@ -63,15 +124,15 @@ public class App {
     }
 
     public void jouerTour(Espece e, int tour, ArrayList<Espece> buffer) {
-        e.jouerTour(proies, predateurs, positionsEspeces, tour, TAILLE_MAP, buffer);
+        e.jouerTour(proies, predateurs, positionsEspeces, tour, gridSize, buffer);
         e.reinitTour();
     }
 
     public void afficherPositions() {
-        for (int y = 0; y < TAILLE_MAP; y++) {
-            for (int x = 0; x < TAILLE_MAP; x++) {
+        for (int y = 0; y < gridSize; y++) {
+            for (int x = 0; x < gridSize; x++) {
                 if (positionsEspeces[x][y] == Case.Vide) {
-                    System.out.print(String.format("%10s",  x + " " + y));
+                    System.out.print(String.format("%10s",  x + ":" + y));
                 } else {
                     System.out.print(String.format("%10s", positionsEspeces[x][y]));
                 }
@@ -80,60 +141,8 @@ public class App {
         }
     }
 
-    static final int NB_TOURS = 20;
-
     public static void main(String[] args) {
-        App app = new App();
-        int tour = 1;
-
-        Predateur pred = new Predateur(3, 5, 1);
-        app.ajouterEspece(pred);
-        pred = new Predateur(4, 5, 1);
-        app.ajouterEspece(pred);
-
-        Proie proie = new Proie(15, 3, 1);
-        app.ajouterEspece(proie);
-        proie = new Proie(13, 4, 1);
-        app.ajouterEspece(proie);
-
-        int[] nbProies = new int[NB_TOURS];
-        int[] nbPreds = new int[NB_TOURS];
-
-        while (tour <= NB_TOURS) {
-            System.out.println();
-            System.out.println(tour);
-
-            app.afficherPositions();
-
-            for (Espece e : app.getProies()) {
-                app.jouerTour(e, tour, app.getBuffer());
-            }
-
-            Iterator<Espece> it = app.getPredateurs().iterator();
-            while(it.hasNext()) {
-                Espece e = it.next();
-                app.jouerTour(e, tour, app.getBuffer());
-                if (tour > e.getGeneration() + e.getDureeDeVie()) {
-                    e.mourir(app.getPositionsEspeces());
-                    it.remove();
-                }
-            }
-
-            for (Espece e : app.getBuffer()) {
-                app.ajouterEspece(e);
-            }
-
-            System.out.println(app.getProies());
-            System.out.println(app.getPredateurs());
-
-            nbProies[tour - 1] = app.getProies().size();
-            nbPreds[tour - 1] = app.getPredateurs().size();
-
-            tour++;
-        }
-
-        AfficheGraphe graphe = new AfficheGraphe("Graphe", nbProies, nbPreds);
-        graphe.pack();
-        graphe.setVisible(true);
+        App app = new App(TAILLE_MAP);
+        app.jouerSimulation(NB_TOURS);
     }
 }
