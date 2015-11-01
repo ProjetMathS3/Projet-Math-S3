@@ -13,11 +13,12 @@ import java.util.Random;
 public abstract class Espece {
     private Point position;
     private int generation;
-    private int mouvementParTour = 1;
-    private double vision = 10;
+    private int mouvementParTour = 2;
+    private double vision = 15;
     private int nombreReproduction = 1;
-    private int frequenceReproduction = 5;
-    private int dureeDeVie = 5;
+    private int frequenceReproduction = 2;
+    private int tempsDerniereReproduction = frequenceReproduction;
+    private int dureeDeVie = 3;
     private boolean reprodui = false;
 
 
@@ -85,17 +86,26 @@ public abstract class Espece {
         this.reprodui = reprodui;
     }
 
+    public int getTempsDerniereReproduction() {
+        return tempsDerniereReproduction;
+    }
+
+    public void setTempsDerniereReproduction(int tempsDerniereReproduction) {
+        this.tempsDerniereReproduction = tempsDerniereReproduction;
+    }
 
     // Constructeurs
     public Espece(Point position, int generation) {
         this.position = position;
         this.generation = generation;
+        this.tempsDerniereReproduction = this.frequenceReproduction;
     }
 
     public Espece(Point position, int mouvementParTour, int generation) {
         this.position = position;
         this.mouvementParTour = mouvementParTour;
         this.generation = generation;
+        this.tempsDerniereReproduction = this.frequenceReproduction;
     }
 
     public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
@@ -104,6 +114,7 @@ public abstract class Espece {
         this.vision = vision;
         this.nombreReproduction = nombreReproduction;
         this.frequenceReproduction = frequenceReproduction;
+        this.tempsDerniereReproduction = frequenceReproduction;
         this.dureeDeVie = dureeDeVie;
         this.generation = generation;
     }
@@ -150,29 +161,29 @@ public abstract class Espece {
      *  crée une nouvelle espèce sur une case adjacente
      * @param especes   liste de proies ou de prédateurs
      */
-
     public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, int Generation, ArrayList<Espece> buffer) {
         Espece CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
-/*        while (CongenereDeGenerationLaPlusProche != null &&
-                CongenereDeGenerationLaPlusProche.getClass() == this.getClass() &&
-                ! CongenereDeGenerationLaPlusProche.isReprodui()) {
-            if (Math.abs (generation - CongenereDeGenerationLaPlusProche.getGeneration()) < CongenereDeGenerationLaPlusProche.getGeneration()) {
-                CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
-            }
-        }*/
 
-        if (CongenereDeGenerationLaPlusProche != null) {
+        if (CongenereDeGenerationLaPlusProche != null && ! CongenereDeGenerationLaPlusProche.isReprodui() && ! isReprodui() &&
+                tempsDerniereReproduction > frequenceReproduction) {
+            System.out.println("bim");
+            tempsDerniereReproduction = 0;
             setReprodui(true);
             CongenereDeGenerationLaPlusProche.setReprodui(true);
-            Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
-            Espece nouveauNe;
-            if (this instanceof Proie) {
-                nouveauNe = new Proie (positionNouveauNe, Generation);
+            for (int i=0; i < nombreReproduction; i++) {
+                Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
+                if (positionNouveauNe != null) {
+                    System.out.println(CongenereDeGenerationLaPlusProche.getClass().toString() + positionNouveauNe);
+                    Espece nouveauNe;
+                    if (this instanceof Proie) {
+                        nouveauNe = new Proie (positionNouveauNe, Generation);
+                    }
+                    else {
+                        nouveauNe = new Predateur(positionNouveauNe, Generation);
+                    }
+                    buffer.add(nouveauNe);
+                }
             }
-            else {
-                nouveauNe = new Predateur(positionNouveauNe, Generation);
-            }
-            buffer.add(nouveauNe);
         }
     }
 
@@ -187,14 +198,21 @@ public abstract class Espece {
             ajouterCaseDispo(e2, positionsEspeces, 0, deltaY, casesDisponibles);
         }
 
-        Random rand = new Random();
-        return casesDisponibles.get(rand.nextInt(casesDisponibles.size()));
+        //System.out.println(e1.getClass().toString() + casesDisponibles);
+        if (! casesDisponibles.isEmpty()) {
+            Random rand = new Random();
+            return casesDisponibles.get(rand.nextInt(casesDisponibles.size()));
+        } else {
+            return null;
+        }
     }
 
     private void ajouterCaseDispo(Espece e, Case[][] positionsEspeces, int deltaX, int deltaY, ArrayList<Point> casesDisponibles) {
         Point caseAdjacente = new Point(e.getPosition());
         caseAdjacente.translate(deltaX, deltaY);
-        if (caseAdjacente.x < 0 || caseAdjacente.y >= positionsEspeces.length || positionsEspeces[caseAdjacente.x][caseAdjacente.y] != Case.Vide) {
+        if (caseAdjacente.x >= 0 && caseAdjacente.x < positionsEspeces.length &&
+                caseAdjacente.y >= 0 && caseAdjacente.y < positionsEspeces.length &&
+                positionsEspeces[caseAdjacente.x][caseAdjacente.y] == Case.Vide) {
             casesDisponibles.add(caseAdjacente);
         }
     }
@@ -274,6 +292,10 @@ public abstract class Espece {
         }
     }
 
+    public void mourir(Case[][] positionsEspeces) {
+        positionsEspeces[position.x][position.y] = Case.Vide;
+    }
+
     public void reinitTour() {
         reprodui = false;
     }
@@ -288,37 +310,10 @@ public abstract class Espece {
         return "{" +
                 "position=" + position +
                 ", generation=" + generation +
-                ", mouvementParTour=" + mouvementParTour +
-                ", vision=" + vision +
-                ", nombreReproduction=" + nombreReproduction +
-                ", frequenceReproduction=" + frequenceReproduction +
-                ", dureeDeVie=" + dureeDeVie +
-                ", reprodui=" + reprodui +
                 '}';
     }
 
     public static void main(String[] args) {
-        Predateur e1 = new Predateur(5,1, 9);
-        Predateur e2 = new Predateur(9, 6, 9);
 
-        ArrayList<Point> casesDisponibles = new ArrayList<>();
-        for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
-            Point caseAdjacente = new Point(e1.getPosition());
-            caseAdjacente.translate(deltaX, 0);
-            casesDisponibles.add(caseAdjacente);
-
-            caseAdjacente = new Point(e2.getPosition());
-            caseAdjacente.translate(deltaX, 0);
-            casesDisponibles.add(caseAdjacente);
-        }
-        for (int deltaY = -1; deltaY <= 1; deltaY += 2) {
-            Point caseAdjacente = new Point(e1.getPosition());
-            caseAdjacente.translate(0, deltaY);
-            casesDisponibles.add(caseAdjacente);
-
-            caseAdjacente = new Point(e2.getPosition());
-            caseAdjacente.translate(0, deltaY);
-            casesDisponibles.add(caseAdjacente);
-        }
     }
 }

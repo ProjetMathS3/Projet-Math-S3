@@ -1,5 +1,6 @@
 package core;
 
+import GUI.AfficheGraphe;
 import utils.Case;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.Iterator;
  */
 public class App {
 
-    static final int TAILLE_MAP = 10;
+    static final int TAILLE_MAP = 20;
 
     ArrayList<Espece> proies;
     ArrayList<Espece> predateurs;
@@ -59,24 +60,27 @@ public class App {
                 positionsEspeces[e.getPosition().x][e.getPosition().y] = Case.Predateur;
             }
         }
-        else {
-            System.err.println("Position " + e.getPosition() + " deja occupee");
-        }
     }
 
     public void jouerTour(Espece e, int tour, ArrayList<Espece> buffer) {
         e.jouerTour(proies, predateurs, positionsEspeces, tour, TAILLE_MAP, buffer);
+        e.reinitTour();
     }
 
     public void afficherPositions() {
         for (int y = 0; y < TAILLE_MAP; y++) {
             for (int x = 0; x < TAILLE_MAP; x++) {
-                System.out.print(String.format("%10s",  positionsEspeces[x][y]));
+                if (positionsEspeces[x][y] == Case.Vide) {
+                    System.out.print(String.format("%10s",  x + " " + y));
+                } else {
+                    System.out.print(String.format("%10s", positionsEspeces[x][y]));
+                }
             }
             System.out.println();
         }
     }
 
+    static final int NB_TOURS = 20;
 
     public static void main(String[] args) {
         App app = new App();
@@ -87,11 +91,17 @@ public class App {
         pred = new Predateur(4, 5, 1);
         app.ajouterEspece(pred);
 
-        Proie proie = new Proie(6, 3, 1);
+        Proie proie = new Proie(15, 3, 1);
+        app.ajouterEspece(proie);
+        proie = new Proie(13, 4, 1);
         app.ajouterEspece(proie);
 
-        while (tour <= 11) {
+        int[] nbProies = new int[NB_TOURS];
+        int[] nbPreds = new int[NB_TOURS];
+
+        while (tour <= NB_TOURS) {
             System.out.println();
+            System.out.println(tour);
 
             app.afficherPositions();
 
@@ -104,6 +114,7 @@ public class App {
                 Espece e = it.next();
                 app.jouerTour(e, tour, app.getBuffer());
                 if (tour > e.getGeneration() + e.getDureeDeVie()) {
+                    e.mourir(app.getPositionsEspeces());
                     it.remove();
                 }
             }
@@ -112,7 +123,17 @@ public class App {
                 app.ajouterEspece(e);
             }
 
+            System.out.println(app.getProies());
+            System.out.println(app.getPredateurs());
+
+            nbProies[tour - 1] = app.getProies().size();
+            nbPreds[tour - 1] = app.getPredateurs().size();
+
             tour++;
         }
+
+        AfficheGraphe graphe = new AfficheGraphe("Graphe", nbProies, nbPreds);
+        graphe.pack();
+        graphe.setVisible(true);
     }
 }

@@ -39,12 +39,14 @@ public class Proie extends Espece {
      */
     protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp, int generation, int mapSize, ArrayList<Espece> buffer) {
         seReproduire (Proie, positionsEsp, generation, buffer);
-        if (trouverIndividuProche(Predateur) != null)
+        Espece ennemi = trouverIndividuProche(Predateur);
+        if (ennemi != null && getPosition().distance(ennemi.getPosition()) < getVision())
             fuir (Predateur, mapSize, positionsEsp);
         else {
             allerVersCongenere(Proie, positionsEsp);
             seReproduire(Proie, positionsEsp, generation, buffer);
         }
+        setTempsDerniereReproduction(getTempsDerniereReproduction() + 1);
     }
 
     /**OUFUIR - Comportement:
@@ -55,26 +57,24 @@ public class Proie extends Espece {
         Point PositionPredateur = new Point(trouverIndividuProche(Predateur).getPosition());
         Point VecteurDirection = new Point (Position.x - PositionPredateur.x, Position.y - PositionPredateur.y);
         Point Deplacement = new Point (Position);
+        int loopSafe = 0;
         
-        while (Deplacement.x < MapSize - 1 && Deplacement.x > 0) {
+        while (loopSafe < 50 && Deplacement.x < MapSize - 1 && Deplacement.x > 0) {
             Deplacement.x += VecteurDirection.x;
+            loopSafe++;
         }
         for (int i = 0; i != (VecteurDirection.x + 1) && Deplacement.x < MapSize && Deplacement.x > 0; ++i) {
             ++Deplacement.x;
         }
-        while ((Position.y + Deplacement.y) < MapSize && Deplacement.y > 0) {
+        while (loopSafe < 50 && (Position.y + Deplacement.y) < MapSize && Deplacement.y > 0) {
             Deplacement.y += VecteurDirection.y;
+            loopSafe++;
         }
         for (int i = 0; i != (VecteurDirection.y + 1) && Deplacement.y < MapSize && Deplacement.y > 0; ++i) {
             ++Deplacement.y;
         }
         return Deplacement;
     } //ouFuir ()
-
-
-    public void mourir(Case[][] positionsEspeces) {
-        positionsEspeces[getPosition().x][getPosition().y] = Case.Vide;
-    }
 
 
     /**FUIR - Comportement:

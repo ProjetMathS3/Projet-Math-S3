@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class Predateur extends Espece {
     private int niveauFaim;
-    private int etatLimiteFaim;
+    private int etatLimiteFaim = 3;
 
     public Predateur(Point position, int generation) {
         super(position, generation);
@@ -55,11 +55,15 @@ public class Predateur extends Espece {
 
 
     public void jouerTour(ArrayList<Espece> proies, ArrayList<Espece> predateurs, Case[][] posEspeces, int tour, int mapSize, ArrayList<Espece> buffer) {
+        seReproduire(predateurs, posEspeces, tour, buffer);
         if (niveauFaim < etatLimiteFaim) {
+            allerVersCongenere(predateurs, posEspeces);
             seReproduire(predateurs, posEspeces, tour, buffer);
+        } else {
+            chasser(proies, posEspeces);
         }
-        chasser(proies, posEspeces);
         niveauFaim++;
+        setTempsDerniereReproduction(getTempsDerniereReproduction() + 1);
     }
 
     public void chasser(ArrayList<Espece> proiesList, Case[][] positionsIndividus) {
@@ -79,22 +83,10 @@ public class Predateur extends Espece {
         }
     }
 
-    /*ALLERVERSCONGENERE - Comportement:
-      SI il y des congégères (aka même espèce),
-      ALORS la créature se déplace vers eux et se reproduit SI elle ne l'a pas déjà fait
-      SINON, elle ne fait rien
-     */
-    private void allerVersCongenere () {
-/*        if (isCongenerePresent ()) {
-            allerVersPosition (CongenereLePlusProche);
-        }*/
-    }
-
     @Override
     public String toString() {
         return "Predateur{" +  super.toString() +
                 ", niveauFaim=" + niveauFaim +
-                ", etatLimiteFaim=" + etatLimiteFaim +
                 "} ";
     }
 }
