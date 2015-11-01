@@ -280,10 +280,20 @@ public abstract class Espece {
         }
     }
 
+    /**
+     * ESTSURCASEVALIDE - Comportement:
+     * Renvoie vrai si la position est à l'intérieur de la map
+     */
+
     private boolean estCaseValide(int x, int y, int tailleMap) {
         return x >= 0 && x < tailleMap
                 && y >= 0 && y < tailleMap;
     }
+
+
+    /**SEDEPLACER - Comportement:
+     * Se déplace vers une case vide et dans la map
+     */
 
     private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (estCaseValide(position.x + deltaX, position.y + deltaY, positionsIndividus.length) && positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
@@ -293,10 +303,11 @@ public abstract class Espece {
         }
     }
 
-    /**
+
+    /**ALLERVERSCONGENERE - Comportement:
      * Se déplace vers le congénère le plus proche
-     * @param especes   liste des congénères
      */
+
     public void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
@@ -306,17 +317,29 @@ public abstract class Espece {
         }
     }
 
+
+    /** MOURIR - Comportement:
+     * Vide la case de l'entité devant mourrir (mais ne supprime pas l'entité de son tableau d'espèce)
+     */
+
     public void mourir(Case[][] positionsEspeces) {
         positionsEspeces[position.x][position.y] = Case.Vide;
     }
+
+
+    /** REINITTOUR - Comportement:
+     *  Réinitialise l'appêtit sexuel de la créature au début de chaque tour pour qu'elle puisse coïtter en paix.
+     */
 
     public void reinitTour() {
         reprodui = false;
     }
 
-    /**
+
+    /** JOUERTOUR - Comportement
      * Jouer un tour de l'individu
      */
+
     protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int mapSize, ArrayList<Espece> buffer);
 
     @Override
