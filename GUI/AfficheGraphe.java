@@ -98,7 +98,7 @@ public class AfficheGraphe extends ApplicationFrame
     {
         return ChartFactory.createTimeSeriesChart(
                 "",
-                "Années",
+                "Annees",
                 "Population",
                 dataset,
                 true,

@@ -14,6 +14,7 @@ public abstract class Espece {
     private Point position;
     private int generation;
     private int mouvementParTour = 2;
+    protected int niveauFaim = 0;
     private double vision = 15;
     private int nombreReproduction = 1;
     private int frequenceReproduction = 2;
@@ -172,13 +173,12 @@ public abstract class Espece {
             for (int i=0; i < nombreReproduction; i++) {
                 Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
                 if (positionNouveauNe != null) {
-                    System.out.println(CongenereDeGenerationLaPlusProche.getClass().toString() + positionNouveauNe);
                     Espece nouveauNe;
                     if (this instanceof Proie) {
                         nouveauNe = new Proie (positionNouveauNe, Generation);
                     }
                     else {
-                        nouveauNe = new Predateur(positionNouveauNe, Generation);
+                        nouveauNe = new Predateur(positionNouveauNe, generation, 0);
                     }
                     buffer.add(nouveauNe);
                 }
@@ -287,8 +287,6 @@ public abstract class Espece {
     public void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
-            System.out.println(individuProche);
-            System.out.println(getPosition());
             allerVersPosition(individuProche.getPosition(), positionEspeces);
         }
     }

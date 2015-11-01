@@ -75,29 +75,31 @@ public class App {
         int[] nbPreds = new int[nbTours];
 
         while (tour <= nbTours) {
-            System.out.println();
             System.out.println(tour);
-
             afficherPositions();
 
-            System.out.println(getProies());
-            for (Espece e : getProies()) {
-                jouerTour(e, tour, getBuffer());
-            }
-
-            Iterator<Espece> it = getPredateurs().iterator();
+            Iterator<Espece> it = getProies().iterator();
             while(it.hasNext()) {
                 Espece e = it.next();
                 jouerTour(e, tour, getBuffer());
-                if (tour > e.getGeneration() + e.getDureeDeVie()) {
+            }
+
+            it = getPredateurs().iterator();
+            while(it.hasNext()) {
+                Espece e = it.next();
+                System.out.println(predateurs);
+                jouerTour(e, tour, getBuffer());
+                if (e.niveauFaim >= e.getDureeDeVie()) {
                     e.mourir(getPositionsEspeces());
                     it.remove();
                 }
+                System.out.println(e.niveauFaim + ";" + e.getDureeDeVie());
             }
 
             for (Espece e : getBuffer()) {
                 ajouterEspece(e);
             }
+            buffer = new ArrayList<>();
 
             nbProies[tour - 1] = getProies().size();
             nbPreds[tour - 1] = getPredateurs().size();

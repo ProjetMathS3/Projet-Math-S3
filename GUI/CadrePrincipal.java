@@ -28,13 +28,14 @@ import GUI.AfficheGraphe;
 
 public class CadrePrincipal extends JFrame {
     public int c ;
+    static final int NB_TOURS = 500;
 
     private static final int nombreParametres = 11; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
     private static final String[] nomsParametres =
             { "Déplacement proie", "Fréquence reproduction proies", "Taux de reproduction proies", "Mortalité des proies", "Vision proies",
                     "Déplacement prédateur", "Fréquence reproduction prédateurs", "Taux de reproduction prédateurs",
                     "Mortalité des prédateurs", "Vision prédateurs", "Famine"};
-    private int[] valeurParametres = { 1, 1, 2, 0, 20, 1, 3, 1, 5, 20, 3 }; //Paramètres par défaut
+    private int[] valeurParametres = { 1, 1, 2, 10, 20, 1, 3, 1, 5, 20, 3 }; //Paramètres par défaut
     private JTextField[] champsParametres;
     private JTextField champExpression;
     //private PanneauDessin dessin;
@@ -133,7 +134,7 @@ public class CadrePrincipal extends JFrame {
                     app.ajouterEspece(new Predateur(new Point(p.y, p.x), valeurParametres[5], valeurParametres[9], valeurParametres[7], valeurParametres[6], valeurParametres[8],
                             1, valeurParametres[10]));
                 }
-                app.jouerSimulation(200);
+                app.jouerSimulation(NB_TOURS);
 
                 AfficheGraphe lokta = new AfficheGraphe("Lokta-Volterra", positionsProies.size(), valeurParametres[1], valeurParametres[3],
                         positionsPredateurs.size(), valeurParametres[6], valeurParametres[8]);

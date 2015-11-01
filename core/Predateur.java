@@ -9,7 +9,6 @@ import java.util.ArrayList;
  * Created by r14003530 on 09/10/15.
  */
 public class Predateur extends Espece {
-    private int niveauFaim;
     private int etatLimiteFaim = 3;
 
     public Predateur(Point position, int generation) {
@@ -20,10 +19,9 @@ public class Predateur extends Espece {
         this(new Point(x,y), generation);
     }
 
-    public Predateur(Point position, int generation, int etatLimiteFaim) {
+    public Predateur(Point position, int generation, int niveauFaim) {
         super(position, generation);
-        this.etatLimiteFaim = etatLimiteFaim;
-        this.niveauFaim = etatLimiteFaim;
+        this.niveauFaim = niveauFaim;
     }
 
     public Predateur(Point position, int mouvementParTour, int generation, int etatLimiteFaim) {
