@@ -12,20 +12,20 @@ public class Proie extends Espece {
 
     //CONSTRUCTEURS
 
-    public Proie (Point position, int generation) {
-        super(position, generation);
+    public Proie (Point position) {
+        super(position);
     }
 
-    public Proie (int x, int y, int generation) {
-        super(new Point(x,y), generation);
+    public Proie (int x, int y,) {
+        super(new Point(x,y);
     }
 
-    public Proie (Point position, int mouvementParTour, int generation) {
-        super(position, mouvementParTour, generation);
+    public Proie (Point position, int mouvementParTour,) {
+        super(position, mouvementParTour);
     }
 
-    public Proie (Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
-        super(position, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, generation);
+    public Proie (Point position, int mouvementParTour, double vision, int nombreReproduction, int periodeReproduction, int dureeDeVie) {
+        super(position, mouvementParTour, vision, nombreReproduction, periodeReproduction, dureeDeVie);
     }
 
 
@@ -37,14 +37,14 @@ public class Proie extends Espece {
      * ALORS elle va vers elle pour se reproduir,
      * SINON, elle ne fait rien
      */
-    protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp, int generation, int mapSize, ArrayList<Espece> buffer) {
-        seReproduire (Proie, positionsEsp, generation, buffer);
+    protected void jouerTour(ArrayList<Espece> Proie, ArrayList<Espece> Predateur, Case[][] positionsEsp, int mapSize, ArrayList<Espece> buffer) {
+        seReproduire (Proie, positionsEsp, buffer);
         Espece ennemi = trouverIndividuProche(Predateur);
         if (ennemi != null && getPosition().distance(ennemi.getPosition()) < getVision())
             fuir (Predateur, mapSize, positionsEsp);
         else {
             allerVersCongenere(Proie, positionsEsp);
-            seReproduire(Proie, positionsEsp, generation, buffer);
+            seReproduire(Proie, positionsEsp, buffer);
         }
         setTempsDerniereReproduction(getTempsDerniereReproduction() + 1);
     }
