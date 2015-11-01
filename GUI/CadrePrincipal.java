@@ -4,6 +4,7 @@
 package GUI;
 
 import core.App;
+import core.Predateur;
 import core.Proie;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.plot.CategoryMarker;
@@ -64,13 +65,14 @@ public class CadrePrincipal extends JFrame {
     private JRadioButtonMenuItem automatique = new JRadioButtonMenuItem("Automatique");
 
     App app;
-    ArrayList<Point> positionsIndividus;
-
+    ArrayList<Point> positionsProies;
+    ArrayList<Point> positionsPredateurs;
 
 
     public CadrePrincipal () {
         super ("Simulateur d'évolution");
-        positionsIndividus = new ArrayList<>();
+        positionsProies = new ArrayList<>();
+        positionsPredateurs = new ArrayList<>();
         JPanel panneauDeGauche = InitAndAddPanneauDeGauche(); //Initialise le panneau de gauche avec la grille et les paramètres
         JPanel panneauDuBas = InitAndAddTableau();
 
@@ -124,12 +126,19 @@ public class CadrePrincipal extends JFrame {
         item3.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                for (Point p : positionsIndividus) {
-                    System.out.println(p);
+                for (Point p : positionsProies) {
                     app.ajouterEspece(new Proie(new Point(p.y, p.x), valeurParametres[0], valeurParametres[4], valeurParametres[2], valeurParametres[1], valeurParametres[3], 1));
                 }
-                System.out.println(app.getProies());
-                app.jouerSimulation(10);
+                for (Point p : positionsPredateurs) {
+                    app.ajouterEspece(new Predateur(new Point(p.y, p.x), valeurParametres[5], valeurParametres[9], valeurParametres[7], valeurParametres[6], valeurParametres[8],
+                            1, valeurParametres[10]));
+                }
+                app.jouerSimulation(200);
+
+                AfficheGraphe lokta = new AfficheGraphe("Lokta-Volterra", positionsProies.size(), valeurParametres[1], valeurParametres[3],
+                        positionsPredateurs.size(), valeurParametres[6], valeurParametres[8]);
+                lokta.pack();
+                lokta.setVisible(true);
             }
         });
         this.test1.add(item2);
@@ -328,7 +337,7 @@ public class CadrePrincipal extends JFrame {
             largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
-        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsIndividus);
+        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
 
         app = new App(c);
 
@@ -390,7 +399,7 @@ public class CadrePrincipal extends JFrame {
             largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
-        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsIndividus);
+        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
         Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
         int LargeurEcran =(int)tailleEcran.getHeight();
         int HauteurEcran =(int)tailleEcran.getWidth();

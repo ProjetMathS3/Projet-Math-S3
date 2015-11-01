@@ -63,13 +63,13 @@ public class App {
         pred = new Predateur(4, 5, 1);
         ajouterEspece(pred);
 
-*/
+
 
 
         Proie proie = new Proie(5, 3, 1);
         ajouterEspece(proie);
         proie = new Proie(3, 4, 1);
-        ajouterEspece(proie);
+        ajouterEspece(proie);*/
 
         int[] nbProies = new int[nbTours];
         int[] nbPreds = new int[nbTours];
@@ -108,6 +108,7 @@ public class App {
         AfficheGraphe graphe = new AfficheGraphe("Graphe", nbProies, nbPreds);
         graphe.pack();
         graphe.setVisible(true);
+
     }
 
     public void ajouterEspece(Espece e) {

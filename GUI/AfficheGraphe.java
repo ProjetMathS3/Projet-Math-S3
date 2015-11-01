@@ -45,13 +45,7 @@ public class AfficheGraphe extends ApplicationFrame
         Month current = new Month();
         int valueProie = 100;
         int valuePred = 100 ;
-/*        int ListSize ;
-        if (ListeNbPred.size() > ListSize) {
-            ListSize = ListeNbPred.size() ;
-        }
-        else {
-            ListSize = ListeNbProies.size() ;
-        } // Les listes sont supposés avoir la même taille mais on sait jamais donc je prend la plus grande*/
+
         for (int i = 0 ; i < ListeNbProie.length ; i++) {
             try {
                 valueProie = ListeNbProie[i];
@@ -64,8 +58,8 @@ public class AfficheGraphe extends ApplicationFrame
                 System.err.println("Error adding to series");
             }
         }
-        series.addSeries(Proies);
         series.addSeries(Predateurs);
+        series.addSeries(Proies);
         return series;
     }
 
@@ -95,8 +89,8 @@ public class AfficheGraphe extends ApplicationFrame
                 System.err.println("Error adding to series");
             }
         }
-        series.addSeries(Proies);
         series.addSeries(Predateurs);
+        series.addSeries(Proies);
         return series;
     }
     

@@ -166,7 +166,6 @@ public abstract class Espece {
 
         if (CongenereDeGenerationLaPlusProche != null && ! CongenereDeGenerationLaPlusProche.isReprodui() && ! isReprodui() &&
                 tempsDerniereReproduction > frequenceReproduction) {
-            System.out.println("bim");
             tempsDerniereReproduction = 0;
             setReprodui(true);
             CongenereDeGenerationLaPlusProche.setReprodui(true);

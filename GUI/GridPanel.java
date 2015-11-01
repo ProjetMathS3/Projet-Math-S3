@@ -2,9 +2,9 @@ package GUI;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class GridPanel extends JPanel {
@@ -12,39 +12,55 @@ public class GridPanel extends JPanel {
     private int cols;
     private JButton[][] grid;
     private Dimension D;
-    ArrayList<Point> positions;
+    ArrayList<Point> positionsProies;
+    ArrayList<Point> positionsPredateurs;
 
-    public ArrayList<Point> getPositions() {
-        return positions;
+    public ArrayList<Point> getPositionsProies() {
+        return positionsProies;
     }
 
-    public GridPanel(String title, int r, int c, Dimension d, ArrayList<Point> positions) {
+    public ArrayList<Point> getPositionsPredateurs() {
+        return positionsPredateurs;
+    }
+
+    public GridPanel(String title, int r, int c, Dimension d, ArrayList<Point> positionsProies, ArrayList<Point> positionsPredateurs) {
         rows = r;
         cols = c;
         D=d;
         grid = new JButton[rows][cols];
-        this.positions = positions;
+        this.positionsProies = positionsProies;
+        this.positionsPredateurs = positionsPredateurs;
 
         setLayout (new GridLayout(rows, cols));
         setBackground( new Color( 200,200,200 ) );
 
-        class Listener implements ActionListener {
+        class Listener extends MouseAdapter {
             int i;
             int j;
             JButton button;
-            ArrayList<Point> positions;
-            public Listener(JButton caller, int i, int j, ArrayList<Point> positions) {
+            ArrayList<Point> positionsProies;
+            ArrayList<Point> positionsPredateurs;
+
+            public Listener(JButton caller, int i, int j, ArrayList<Point> positionsProies, ArrayList<Point> positionsPredateurs) {
                 this.i = i;
                 this.j = j;
-                this.positions = positions;
+                this.positionsProies = positionsProies;
+                this.positionsPredateurs = positionsPredateurs;
                 this.button = caller;
             }
 
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void mouseClicked(MouseEvent mouseEvent) {
                 System.out.println(i + ":" + j);
-                positions.add(new Point(i, j));
-                button.setBackground(Color.BLUE);
+
+                if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
+                    positionsProies.add(new Point(i, j));
+                    button.setBackground(Color.BLUE);
+                } else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
+                    positionsPredateurs.add(new Point(i, j));
+                    button.setBackground(Color.RED);
+                }
+
             }
         }
 
@@ -55,7 +71,7 @@ public class GridPanel extends JPanel {
                 grid[i][j].setFont( new Font("Courier", Font.BOLD, 12));
                 grid[i][j].setForeground(Color.WHITE);
                 grid[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                grid[i][j].addActionListener(new Listener(grid[i][j], i,j, positions));
+                grid[i][j].addMouseListener(new Listener(grid[i][j], i, j, positionsProies, positionsPredateurs));
                 add(grid[i][j]);
             }
         }
