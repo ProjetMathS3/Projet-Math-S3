@@ -20,6 +20,7 @@ public abstract class Espece {
     private int dureeDeVie = 3;
     private boolean reprodui = false;
 
+    //GETTERS & SETTERS
 
     public Point getPosition() {
         return position;
@@ -85,7 +86,9 @@ public abstract class Espece {
         this.tempsDerniereReproduction = tempsDerniereReproduction;
     }
 
+
     // Constructeurs
+
     public Espece(Point position) {
         this.position = position;
         this.tempsDerniereReproduction = this.periodeReproduction;
@@ -107,11 +110,11 @@ public abstract class Espece {
         this.dureeDeVie = dureeDeVie;
     }
 
-    /**
+
+    /** TROUVER INDIVIDU PROCHE - Comportement:
      * Renvoie l'individu le plus proche dans list
-     * @param list  une liste d'espèces
-     * @return      l'individu trouvé
      */
+
     public Espece trouverIndividuProche(ArrayList<Espece> list) {
         Espece individuProche = null;
         double distancePlusProche = vision;
@@ -128,6 +131,10 @@ public abstract class Espece {
         return individuProche;
     }
 
+    /** TROUVERINDIVUDUCASEADJACENTE - Comportement:
+     * Renvoie la première entité de l'espèce donnée en paramètre et qui a une position adjacente à celle qui apelle la fonction
+     * sinon renvoie null
+     **/
     public Espece trouverIndividuCaseAdjacente(ArrayList<Espece> list) {
         for (Espece e : list) {
             if (estSurCaseAdjacente(e.getPosition())) {
@@ -137,6 +144,10 @@ public abstract class Espece {
         return null;
     }
 
+    /** ESTSURCASEADJACENTE - Comportement:
+     *  Renvoie vrai si le point passé en parametre est sur une case adjacente de l'entité qui appelle la fonction
+     */
+
     private boolean estSurCaseAdjacente(Point positionATester) {
         return (positionATester.x == position.x && positionATester.y == position.y + 1) ||
                 (positionATester.x == position.x && positionATester.y == position.y - 1) ||
@@ -144,10 +155,9 @@ public abstract class Espece {
                 (positionATester.x == position.x - 1 && positionATester.y == position.y);
     }
 
-    /**
-     * Si un autre individu est sur la même case :
-     *  crée une nouvelle espèce sur une case adjacente
-     * @param especes   liste de proies ou de prédateurs
+    /** SEREPRODUIRE - Comportement:
+     * SI un autre individu de al meme espece est sur la même case ET qu'ils ne se sont pas reproduis
+     * ALORS crée une nouvelle espèce sur une case adjacente
      */
     public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, ArrayList<Espece> buffer) {
         Espece Congenere = trouverIndividuCaseAdjacente(espece);
@@ -175,6 +185,11 @@ public abstract class Espece {
         }
     }
 
+
+    /** CHOISIRCASENAISSANCE - Comportement:
+     *  Choisit une case aléatoire entre les cases qui entourent les deux parents
+     */
+
     private Point choisirCaseNaissance(Espece e1, Espece e2, Case[][] positionsEspeces) {
         ArrayList<Point> casesDisponibles = new ArrayList<>();
         for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
@@ -195,6 +210,10 @@ public abstract class Espece {
         }
     }
 
+
+    /** AJOUTERCASEDISPO - Comportement:
+     *  Ajoute une case qui entourne les deux parents et qui ne contient pas déjà une entité pour traitement ultérieur
+     */
     private void ajouterCaseDispo(Espece e, Case[][] positionsEspeces, int deltaX, int deltaY, ArrayList<Point> casesDisponibles) {
         Point caseAdjacente = new Point(e.getPosition());
         caseAdjacente.translate(deltaX, deltaY);
@@ -205,11 +224,11 @@ public abstract class Espece {
         }
     }
 
-    /**
+
+    /** ALLERVERSPOSITION - Comportement:
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
-     * @param positionCible         position cible
-     * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
+
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         int mouvementRestant = mouvementParTour;
         boolean bloque = false;
@@ -238,6 +257,11 @@ public abstract class Espece {
             mouvementRestant--;
         }
     }
+
+
+    /**ALLERSURCASEADJACENTE - Comportement:
+     * Se déplace sur une case adjacente en fonction de la direction choisie
+     */
 
     private void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
         switch (direction) {
