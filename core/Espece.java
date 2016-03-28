@@ -1,4 +1,4 @@
-package core;
+﻿package core;
 
 import utils.Case;
 import utils.Directions;
@@ -12,7 +12,6 @@ import java.util.Random;
  */
 public abstract class Espece {
     private Point position;
-    private int generation;
     private int mouvementParTour = 2;
     protected int niveauFaim = 0;
     protected int mouvementRestant;
@@ -20,10 +19,12 @@ public abstract class Espece {
     private int nombreReproduction = 1;
     private int frequenceReproduction = 2;
     private int reposReproduction = 0;
+
     private int dureeDeVie = 3;
     private boolean reprodui = false;
     protected int etatLimiteFaim;
 
+    //GETTERS & SETTERS
 
     public Point getPosition() {
         return position;
@@ -58,11 +59,11 @@ public abstract class Espece {
     }
 
     public int getFrequenceReproduction() {
-        return frequenceReproduction;
+        return periodeReproduction;
     }
 
-    public void setFrequenceReproduction(int frequenceReproduction) {
-        this.frequenceReproduction = frequenceReproduction;
+    public void setFrequenceReproduction(int periodeReproduction) {
+        this.periodeReproduction = periodeReproduction;
     }
 
     public int getDureeDeVie() {
@@ -71,14 +72,6 @@ public abstract class Espece {
 
     public void setDureeDeVie(int dureeDeVie) {
         this.dureeDeVie = dureeDeVie;
-    }
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
     }
 
     public boolean isReprodui() {
@@ -97,33 +90,37 @@ public abstract class Espece {
         this.reposReproduction = reposReproduction;
     }
 
+
     // Constructeurs
-    public Espece(Point position, int generation) {
+
+    public Espece(Point position) {
         this.position = position;
         this.generation = generation;
+
     }
 
-    public Espece(Point position, int mouvementParTour, int generation) {
+    public Espece(Point position, int mouvementParTour) {
         this.position = position;
         this.mouvementParTour = mouvementParTour;
         this.generation = generation;
+
     }
 
-    public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int frequenceReproduction, int dureeDeVie, int generation) {
+    public Espece(Point position, int mouvementParTour, double vision, int nombreReproduction, int periodeReproduction, int dureeDeVie) {
         this.position = position;
         this.mouvementParTour = mouvementParTour;
         this.vision = vision;
         this.nombreReproduction = nombreReproduction;
         this.frequenceReproduction = frequenceReproduction;
+
         this.dureeDeVie = dureeDeVie;
-        this.generation = generation;
     }
 
-    /**
+
+    /** TROUVER INDIVIDU PROCHE - Comportement:
      * Renvoie l'individu le plus proche dans list
-     * @param list  une liste d'espèces
-     * @return      l'individu trouvé
      */
+
     public Espece trouverIndividuProche(ArrayList<Espece> list) {
         Espece individuProche = null;
         double distancePlusProche = vision;
@@ -140,6 +137,10 @@ public abstract class Espece {
         return individuProche;
     }
 
+    /** TROUVERINDIVUDUCASEADJACENTE - Comportement:
+     * Renvoie la première entité de l'espèce donnée en paramètre et qui a une position adjacente à celle qui apelle la fonction
+     * sinon renvoie null
+     **/
     public Espece trouverIndividuCaseAdjacente(ArrayList<Espece> list) {
         for (Espece e : list) {
             if (estSurCaseAdjacente(e.getPosition())) {
@@ -149,6 +150,10 @@ public abstract class Espece {
         return null;
     }
 
+    /** ESTSURCASEADJACENTE - Comportement:
+     *  Renvoie vrai si le point passé en parametre est sur une case adjacente de l'entité qui appelle la fonction
+     */
+
     private boolean estSurCaseAdjacente(Point positionATester) {
         return (positionATester.x == position.x && positionATester.y == position.y + 1) ||
                 (positionATester.x == position.x && positionATester.y == position.y - 1) ||
@@ -156,21 +161,21 @@ public abstract class Espece {
                 (positionATester.x == position.x - 1 && positionATester.y == position.y);
     }
 
-    /**
-     * Si un autre individu est sur la même case :
-     *  crée une nouvelle espèce sur une case adjacente
-     * @param especes   liste de proies ou de prédateurs
+    /** SEREPRODUIRE - Comportement:
+     * SI un autre individu de al meme espece est sur la même case ET qu'ils ne se sont pas reproduis
+     * ALORS crée une nouvelle espèce sur une case adjacente
      */
-    public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, int Generation, ArrayList<Espece> buffer) {
-        Espece CongenereDeGenerationLaPlusProche = trouverIndividuCaseAdjacente(espece);
+    public void seReproduire(ArrayList<Espece> espece, Case[][] positionsEspeces, ArrayList<Espece> buffer) {
+        Espece Congenere = trouverIndividuCaseAdjacente(espece);
 
         if (CongenereDeGenerationLaPlusProche != null && ! CongenereDeGenerationLaPlusProche.isReprodui() && ! isReprodui()) {
             reposReproduction = 0;
             setReprodui(true);
             CongenereDeGenerationLaPlusProche.setReprodui(true);
             CongenereDeGenerationLaPlusProche.setReposReproduction(0);
+
             for (int i=0; i < nombreReproduction; i++) {
-                Point positionNouveauNe = choisirCaseNaissance(this, CongenereDeGenerationLaPlusProche, positionsEspeces);
+                Point positionNouveauNe = choisirCaseNaissance(this, Congenere, positionsEspeces);
                 if (positionNouveauNe != null) {
                     Espece nouveauNe;
                     if (this instanceof Proie) {
@@ -178,12 +183,18 @@ public abstract class Espece {
                     }
                     else {
                         nouveauNe = new Predateur(positionNouveauNe, mouvementParTour, vision, nombreReproduction, frequenceReproduction, dureeDeVie, Generation, etatLimiteFaim);
+
                     }
                     buffer.add(nouveauNe);
                 }
             }
         }
     }
+
+
+    /** CHOISIRCASENAISSANCE - Comportement:
+     *  Choisit une case aléatoire entre les cases qui entourent les deux parents
+     */
 
     private Point choisirCaseNaissance(Espece e1, Espece e2, Case[][] positionsEspeces) {
         ArrayList<Point> casesDisponibles = new ArrayList<>();
@@ -205,6 +216,10 @@ public abstract class Espece {
         }
     }
 
+
+    /** AJOUTERCASEDISPO - Comportement:
+     *  Ajoute une case qui entourne les deux parents et qui ne contient pas déjà une entité pour traitement ultérieur
+     */
     private void ajouterCaseDispo(Espece e, Case[][] positionsEspeces, int deltaX, int deltaY, ArrayList<Point> casesDisponibles) {
         Point caseAdjacente = new Point(e.getPosition());
         caseAdjacente.translate(deltaX, deltaY);
@@ -215,11 +230,11 @@ public abstract class Espece {
         }
     }
 
-    /**
+
+    /** ALLERVERSPOSITION - Comportement:
      * Se déplace vers positionCible autant que mouvement le permette et si aucun obstacle ne l'en empêche
-     * @param positionCible         position cible
-     * @param positionsIndividus    une grille contenant l'information sur les positions occupées ou non
      */
+
     public void allerVersPosition(Point positionCible, Case[][] positionsIndividus) {
         boolean bloque = false;
 
@@ -248,6 +263,11 @@ public abstract class Espece {
         }
     }
 
+
+    /**ALLERSURCASEADJACENTE - Comportement:
+     * Se déplace sur une case adjacente en fonction de la direction choisie
+     */
+
     private void allerSurCaseAdjacente(Directions direction, Case[][] positionsIndividus) {
         switch (direction) {
             case Haut:
@@ -265,10 +285,20 @@ public abstract class Espece {
         }
     }
 
+    /**
+     * ESTSURCASEVALIDE - Comportement:
+     * Renvoie vrai si la position est à l'intérieur de la map
+     */
+
     private boolean estCaseValide(int x, int y, int tailleMap) {
         return x >= 0 && x < tailleMap
                 && y >= 0 && y < tailleMap;
     }
+
+
+    /**SEDEPLACER - Comportement:
+     * Se déplace vers une case vide et dans la map
+     */
 
     private void seDeplacer(int deltaX, int deltaY, Case[][] positionsIndividus) {
         if (estCaseValide(position.x + deltaX, position.y + deltaY, positionsIndividus.length) && positionsIndividus[position.x + deltaX][position.y + deltaY] == Case.Vide) {
@@ -278,10 +308,11 @@ public abstract class Espece {
         }
     }
 
-    /**
+
+    /**ALLERVERSCONGENERE - Comportement:
      * Se déplace vers le congénère le plus proche
-     * @param especes   liste des congénères
      */
+
     public void allerVersCongenere (ArrayList <Espece> especes, Case[][] positionEspeces) {
         Espece individuProche = trouverIndividuProche(especes);
         if (individuProche != null) {
@@ -289,9 +320,19 @@ public abstract class Espece {
         }
     }
 
+
+    /** MOURIR - Comportement:
+     * Vide la case de l'entité devant mourrir (mais ne supprime pas l'entité de son tableau d'espèce)
+     */
+
     public void mourir(Case[][] positionsEspeces) {
         positionsEspeces[position.x][position.y] = Case.Vide;
     }
+
+
+    /** REINITTOUR - Comportement:
+     *  Réinitialise l'appêtit sexuel de la créature au début de chaque tour pour qu'elle puisse coïtter en paix.
+     */
 
     public void reinitTour() {
         ++reposReproduction;
@@ -300,25 +341,22 @@ public abstract class Espece {
         }
     }
 
-    /**
+
+    /** JOUERTOUR - Comportement
      * Jouer un tour de l'individu
      */
-    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int Generation, int mapSize, ArrayList<Espece> buffer);
+
+    protected abstract void jouerTour(ArrayList <Espece> Proie, ArrayList <Espece> Predateur, Case[][] positionsEsp, int mapSize, ArrayList<Espece> buffer);
 
     @Override
     public String toString() {
         return "Espece{" +
                 "position=" + position +
-                ", generation=" + generation +
                 ", mouvementParTour=" + mouvementParTour +
                 ", vision=" + vision +
                 ", nombreReproduction=" + nombreReproduction +
-                ", frequenceReproduction=" + frequenceReproduction +
+                ", periodeReproduction=" + periodeReproduction +
                 ", dureeDeVie=" + dureeDeVie +
                 '}';
-    }
-
-    public static void main(String[] args) {
-
     }
 }

@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Projet-Math-S3.iml" filepath="$PROJECT_DIR$/Projet-Math-S3.iml" />
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/Projet-MathS3.iml" filepath="$PROJECT_DIR$/.idea/Projet-MathS3.iml" />
+>>>>>>> origin/master
     </modules>
   </component>
 </project>
