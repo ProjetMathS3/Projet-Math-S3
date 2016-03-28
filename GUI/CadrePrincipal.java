@@ -28,14 +28,14 @@ import GUI.AfficheGraphe;
 
 public class CadrePrincipal extends JFrame {
     public int c ;
-    static final int NB_TOURS = 500;
+    static final int NB_TOURS = 5;
 
-    private static final int nombreParametres = 11; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
+    private static final int nombreParametres = 12; //Modifier cette valeur si on veux ajouter ou supprimer des paramètres
     private static final String[] nomsParametres =
             { "Déplacement proie", "Fréquence reproduction proies", "Taux de reproduction proies", "Mortalité des proies", "Vision proies",
                     "Déplacement prédateur", "Fréquence reproduction prédateurs", "Taux de reproduction prédateurs",
-                    "Mortalité des prédateurs", "Vision prédateurs", "Famine"};
-    private int[] valeurParametres = { 1, 1, 2, 10, 20, 1, 3, 1, 5, 20, 3 }; //Paramètres par défaut
+                    "Mortalité des prédateurs", "Vision prédateurs", "Famine", "Tours"};
+    private int[] valeurParametres = { 1, 1, 2, 10, 20, 1, 3, 1, 5, 20, 3, 100 }; //Paramètres par défaut
     private JTextField[] champsParametres;
     private JTextField champExpression;
     //private PanneauDessin dessin;
@@ -66,6 +66,7 @@ public class CadrePrincipal extends JFrame {
     private JRadioButtonMenuItem automatique = new JRadioButtonMenuItem("Automatique");
 
     App app;
+    GridPanel disp;
     ArrayList<Point> positionsProies;
     ArrayList<Point> positionsPredateurs;
 
@@ -127,6 +128,7 @@ public class CadrePrincipal extends JFrame {
         item3.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                app.resetSimulation();
                 for (Point p : positionsProies) {
                     app.ajouterEspece(new Proie(new Point(p.y, p.x), valeurParametres[0], valeurParametres[4], valeurParametres[2], valeurParametres[1], valeurParametres[3], 1));
                 }
@@ -134,12 +136,11 @@ public class CadrePrincipal extends JFrame {
                     app.ajouterEspece(new Predateur(new Point(p.y, p.x), valeurParametres[5], valeurParametres[9], valeurParametres[7], valeurParametres[6], valeurParametres[8],
                             1, valeurParametres[10]));
                 }
-                app.jouerSimulation(NB_TOURS);
-
-                AfficheGraphe lokta = new AfficheGraphe("Lokta-Volterra", positionsProies.size(), valeurParametres[1], valeurParametres[3],
-                        positionsPredateurs.size(), valeurParametres[6], valeurParametres[8]);
-                lokta.pack();
-                lokta.setVisible(true);
+                app.jouerSimulation(valeurParametres[11], disp);
+                System.out.println(positionsProies);
+                positionsProies = new ArrayList<>();
+                positionsPredateurs = new ArrayList<>();
+                app.afficherGraphe();
             }
         });
         this.test1.add(item2);
@@ -291,7 +292,7 @@ public class CadrePrincipal extends JFrame {
             uneLigne.add(etiquette);
             uneLigne.add(champ);
             panneauDeParametres.add(uneLigne);
-            if (4 == i)
+            if (4 == i || 10 == i)
                 panneauDeParametres.add(Box.createVerticalStrut(10));
         }
 
@@ -304,8 +305,52 @@ public class CadrePrincipal extends JFrame {
                 }
             }
         });
+
+        JButton Preset = new JButton("Preset");
+        JOptionPane OptionPreset = new JOptionPane() ;
+        Preset.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (c == 20) {
+                    app.setPresetProies();
+                    app.setPresetPredateurs();
+                    app.jouerSimulation(valeurParametres[11], disp);
+                    System.out.println(positionsProies);
+                    positionsProies = new ArrayList<>();
+                    positionsPredateurs = new ArrayList<>();
+                    app.afficherGraphe();
+                }
+                else {
+                    OptionPreset.showMessageDialog(null, "La taille de la grille doit être de 20x20 pour utiliser le preset", "Taille incorrecte", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
         panneauDeParametres.add(Box.createVerticalStrut(10));
         panneauDeParametres.add(bouton);
+        panneauDeParametres.add(Preset);
+
+
+        JButton jouerTour = new JButton("Jouer un tour");
+        jouerTour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (app.getTour() == 1) {
+                    app.resetSimulation();
+                    System.out.println(positionsProies);
+                    for (Point p : positionsProies) {
+                        app.ajouterEspece(new Proie(new Point(p.y, p.x), valeurParametres[0], valeurParametres[4], valeurParametres[2], valeurParametres[1], valeurParametres[3], 1));
+                    }
+                    for (Point p : positionsPredateurs) {
+                        app.ajouterEspece(new Predateur(new Point(p.y, p.x), valeurParametres[5], valeurParametres[9], valeurParametres[7], valeurParametres[6], valeurParametres[8],
+                                1, valeurParametres[10]));
+                    }
+                    app.initSimulationTPT();
+                }
+                app.playSimulationTPT(disp);
+            }
+        });
+        panneauDeParametres.add(jouerTour);
 
         panneauDeParametres.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -315,7 +360,7 @@ public class CadrePrincipal extends JFrame {
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         //Panneau de gauche partie II : La grille
         String taille;
-        taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (ex:10 => 10 Lignes & 10 Colonnes ");
+        taille=JOptionPane.showInputDialog(this,"Taille de la grille  : (20 Pour le preset) ");
         c=Integer.parseInt(taille);
         JPanel panneauDeGauche = new JPanel();
         // Choix dynamique de la taille de la grille en fonction du nombre de case
@@ -338,7 +383,7 @@ public class CadrePrincipal extends JFrame {
             largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
-        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
+        disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
 
         app = new App(c);
 
@@ -400,7 +445,7 @@ public class CadrePrincipal extends JFrame {
             largeurG = (900);
         }
         Dimension Dim = new Dimension(hauteurG, largeurG );
-        GridPanel disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
+        disp = new GridPanel("Proie/Prédateur", c, c, Dim, positionsProies, positionsPredateurs);
         Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
         int LargeurEcran =(int)tailleEcran.getHeight();
         int HauteurEcran =(int)tailleEcran.getWidth();

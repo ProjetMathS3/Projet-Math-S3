@@ -12,10 +12,11 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 import graphe.LodkaVolterra;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 
-public class AfficheGraphe extends ApplicationFrame
+public class AfficheGraphe extends JFrame
 {
     public AfficheGraphe(final String title, double NbProie, double NataProie, double MortaProie, double NbPred, double NataPred, double MortaPred)
     {
@@ -66,14 +67,14 @@ public class AfficheGraphe extends ApplicationFrame
     private XYDataset createVolterraDataset(double NbProie, double NataProie, double MortaProie, double NbPred, double NataPred, double Mortapred)
     {
     	LodkaVolterra ValeursLodka = new LodkaVolterra(NbProie, NataProie, MortaProie, NbPred, NataPred, Mortapred) ;
-    	// Valeurs par défaut pour avoir un graphe pas trop moche : 53000, 0.09, 0.00001, 9000, 0.000005, 0.25
+    	// Valeurs par dï¿½faut pour avoir un graphe pas trop moche : 53000, 0.09, 0.00001, 9000, 0.000005, 0.25
         final TimeSeriesCollection series = new TimeSeriesCollection();
         final TimeSeries Proies = new TimeSeries ("Proies");
         final TimeSeries Predateurs = new TimeSeries ("Predateurs");
         Month current = new Month();
         double valueProie = 100.0;
         double valuePred = 100.0 ;
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 100 ; i++)
         {
             try
             {
@@ -83,6 +84,9 @@ public class AfficheGraphe extends ApplicationFrame
                 Predateurs.add(current, new Double (valuePred));
                 current = ( Month ) current.next( );
                 ValeursLodka.next(i) ;
+                if (valuePred == 0) {
+                    break ;
+                }
             }
             catch ( SeriesException e )
             {
@@ -124,10 +128,10 @@ public class AfficheGraphe extends ApplicationFrame
         GrapheLodka.setVisible( true );
         GrapheProjet.setVisible(true) ;
 
-        /* Ce programme a été codé dans le noir, j'ai un bug sur IntelliJ et je suis dans l'impossibilité de faire des tests :(
-        / La fonction affiche graphe peut s'appeller de deux mannière :
+        /* Ce programme a ï¿½tï¿½ codï¿½ dans le noir, j'ai un bug sur IntelliJ et je suis dans l'impossibilitï¿½ de faire des tests :(
+        / La fonction affiche graphe peut s'appeller de deux manniï¿½re :
             - Avec deux ArrayList<int> en parametre elle les affiche simplement leur contenu
-            - Avec les valeurs de LodkaVolterra (que l'on est sencé récupérer selon les inputs de l'utilisateur) et fait le calcul auto grace a LodkaVolterra.java
+            - Avec les valeurs de LodkaVolterra (que l'on est sencï¿½ rï¿½cupï¿½rer selon les inputs de l'utilisateur) et fait le calcul auto grace a LodkaVolterra.java
         */
     }
 }
